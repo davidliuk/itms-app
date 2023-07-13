@@ -1,4 +1,3 @@
-
 <template>
   <div class="product-list-wrap">
     <div class="product-list-content">
@@ -6,40 +5,59 @@
         <i class="nbicon nbfanhui" @click="goBack"></i>
         <div class="header-search">
           <i class="nbicon nbSearch"></i>
-          <input
-            type="text"
-            class="search-title"
-            v-model="state.keyword"/>
+          <input type="text" class="search-title" v-model="state.keyword" />
         </div>
         <span class="search-btn" @click="getSearch">搜索</span>
       </header>
-      <van-tabs type="card" color="#1baeae" @click-tab="changeTab" >
+      <!-- <van-tabs type="card" color="#1baeae" @click-tab="changeTab"> -->
+      <van-tabs
+        class="custom-tabs"
+        type="line"
+        color="#1baeae"
+        @click-tab="changeTab"
+      >
         <van-tab title="推荐" name=""></van-tab>
         <van-tab title="新品" name="new"></van-tab>
         <van-tab title="价格" name="price"></van-tab>
       </van-tabs>
     </div>
     <div class="content">
-      <van-pull-refresh v-model="state.refreshing" @refresh="onRefresh" class="product-list-refresh">
+      <van-pull-refresh
+        v-model="state.refreshing"
+        @refresh="onRefresh"
+        class="product-list-refresh"
+      >
         <van-list
           v-model:loading="state.loading"
           :finished="state.finished"
-          :finished-text="state.productList.length ? '没有更多了' : '搜索想要的商品'"
+          :finished-text="
+            state.productList.length ? '没有更多了' : '搜索想要的商品'
+          "
           @load="onLoad"
           @offset="10"
         >
           <!-- <p v-for="item in list" :key="item">{{ item }}</p> -->
           <template v-if="state.productList.length">
-            <div class="product-item" v-for="(item, index) in state.productList" :key="index" @click="productDetail(item)">
-              <img :src="$filters.prefix(item.goodsCoverImg)" />
+            <div
+              class="product-item"
+              v-for="(item, index) in state.productList"
+              :key="index"
+              @click="productDetail(item)"
+            >
+              <div><img :src="$filters.prefix(item.goodsCoverImg)" /></div>
               <div class="product-info">
-                <p class="name">{{item.goodsName}}</p>
-                <p class="subtitle">{{item.goodsIntro}}</p>
-                <span class="price">￥ {{item.sellingPrice}}</span>
+                <p class="name">{{ item.goodsName }}</p>
+                <p class="subtitle">{{ item.goodsIntro }}</p>
+                <span class="price">￥ {{ item.sellingPrice }}</span>
               </div>
             </div>
           </template>
-          <img class="empty" v-else src="https://s.yezgea02.com/1604041313083/kesrtd.png" alt="搜索">
+          <img
+            class="empty"
+            v-else
+            src="https://s.yezgea02.com/1604041313083/kesrtd.png"
+            alt="搜索"
+          />
         </van-list>
       </van-pull-refresh>
     </div>
@@ -47,13 +65,13 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { search } from '@/service/good'
-const route = useRoute()
-const router = useRouter()
+import { reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { search } from "@/service/good";
+const route = useRoute();
+const router = useRouter();
 const state = reactive({
-  keyword: route.query.keyword || '',
+  keyword: route.query.keyword || "",
   searchBtn: false,
   seclectActive: false,
   refreshing: false,
@@ -63,105 +81,199 @@ const state = reactive({
   productList: [],
   totalPage: 0,
   page: 1,
-  orderBy: ''
-})
+  orderBy: "",
+});
 const init = async () => {
-  const { categoryId } = route.query
+  const { categoryId } = route.query;
   if (!categoryId && !state.keyword) {
-    state.finished = true
+    state.finished = true;
     state.loading = false;
-    return
+    return;
   }
-  const { data, data: { list } } = await search({ pageNumber: state.page, goodsCategoryId: categoryId, keyword: state.keyword, orderBy: state.orderBy })
-  
-  state.productList = state.productList.concat(list)
-  state.totalPage = data.totalPage
-  state.loading = false;
-  if (state.page >= data.totalPage) state.finished = true
+  const {
+    data,
+    data: { list },
+  } = await search({
+    pageNumber: state.page,
+    goodsCategoryId: categoryId,
+    keyword: state.keyword,
+    orderBy: state.orderBy,
+  });
+  const data1 = {
+    "totalCount": 151,
+    "pageSize": 10,
+    "totalPage": 16,
+    "currPage": 1,
+    "list": [
+        {
+            "goodsId": 10159,
+            "goodsName": "Apple AirPods 配充电盒",
+            "goodsIntro": "苹果蓝牙耳机",
+            "goodsCoverImg": "/goods-img/53c9f268-7cd4-4fac-909c-2dc066625655.jpg",
+            "sellingPrice": 1246
+        },
+        {
+            "goodsId": 10160,
+            "goodsName": "小米 Redmi AirDots",
+            "goodsIntro": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
+            "goodsCoverImg": "/goods-img/c47403f1-b706-453b-88d8-2bfdee0316be.jpg",
+            "sellingPrice": 129
+        },
+        {
+            "goodsId": 10166,
+            "goodsName": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
+            "goodsIntro": "新蜂精选",
+            "goodsCoverImg": "/goods-img/70dc1586-13bd-4b4c-92a9-fe20aa1d531f.jpg",
+            "sellingPrice": 199
+        },
+        {
+            "goodsId": 10175,
+            "goodsName": "雷蛇 Razer 北海巨妖标准版X",
+            "goodsIntro": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
+            "goodsCoverImg": "/goods-img/7345c467-6c2d-4f30-a73d-83d675d5208c.jpg",
+            "sellingPrice": 299
+        },
+        {
+            "goodsId": 10179,
+            "goodsName": "Apple 采用Lightning/闪电接头的 EarP...",
+            "goodsIntro": "耳机",
+            "goodsCoverImg": "/goods-img/bf6ccbc4-d0d0-4fbb-b975-4becb9cb38f4.jpg",
+            "sellingPrice": 223
+        },
+        {
+            "goodsId": 10180,
+            "goodsName": "Apple AirPods 配充电盒",
+            "goodsIntro": "苹果蓝牙耳机",
+            "goodsCoverImg": "/goods-img/64768a8d-0664-4b29-88c9-2626578ffbd1.jpg",
+            "sellingPrice": 1246
+        },
+        {
+            "goodsId": 10181,
+            "goodsName": "小米 Redmi AirDots",
+            "goodsIntro": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
+            "goodsCoverImg": "/goods-img/36d0fe8f-aa28-423c-81e7-82cab31b7598.jpg",
+            "sellingPrice": 129
+        },
+        {
+            "goodsId": 10187,
+            "goodsName": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
+            "goodsIntro": "新蜂精选",
+            "goodsCoverImg": "/goods-img/1e5645d1-24cb-48eb-9aaa-f729fa0db195.jpg",
+            "sellingPrice": 199
+        },
+        {
+            "goodsId": 10196,
+            "goodsName": "雷蛇 Razer 北海巨妖标准版X",
+            "goodsIntro": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
+            "goodsCoverImg": "/goods-img/0cc81546-1408-4140-af95-0341a7778b6c.jpg",
+            "sellingPrice": 299
+        },
+        {
+            "goodsId": 10200,
+            "goodsName": "Apple 采用Lightning/闪电接头的 EarP...",
+            "goodsIntro": "耳机",
+            "goodsCoverImg": "/goods-img/7b8bcf01-0abe-4155-b1f4-e57a6b8fc36a.jpg",
+            "sellingPrice": 223
+        }
+    ]
 }
+
+  state.productList = state.productList.concat(list);
+  state.totalPage = data.totalPage;
+  state.loading = false;
+  if (state.page >= data.totalPage) state.finished = true;
+};
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const productDetail = (item) => {
-  router.push({ path: `/product/${item.goodsId}` })
-}
+  router.push({ path: `/product/${item.goodsId}` });
+};
 
 const getSearch = () => {
-  onRefresh()
-}
+  onRefresh();
+};
 
 const onLoad = () => {
   if (!state.refreshing && state.page < state.totalPage) {
-    state.page = state.page + 1
+    state.page = state.page + 1;
   }
   if (state.refreshing) {
     state.productList = [];
     state.refreshing = false;
   }
-  init()
-}
+  init();
+};
 
 const onRefresh = () => {
-  state.refreshing = true
-  state.finished = false
-  state.loading = true
-  state.page = 1
-  onLoad()
-}
+  state.refreshing = true;
+  state.finished = false;
+  state.loading = true;
+  state.page = 1;
+  onLoad();
+};
 
 const changeTab = ({ name }) => {
-  console.log('name', name)
-  state.orderBy = name
-  onRefresh()
-}
+  console.log("name", name);
+  state.orderBy = name;
+  onRefresh();
+};
 </script>
 
 <style lang="less" scoped>
-  @import '../common/style/mixin';
-  .product-list-content {
-    position: fixed;
-    left: 0;
-    top: 0;
+.custom-tabs {
+  width: 100%;
+  padding-top: 10px;
+  background: white;
+  border-radius: 20px;
+}
+@import "../common/style/mixin";
+.product-list-content {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #f7f7f7;
+  .category-header {
+    .fj();
     width: 100%;
-    z-index: 1000;
-    background: #fff;
-    .category-header {
-      .fj();
-      width: 100%;
-      height: 50px;
-      line-height: 50px;
-      padding: 0 15px;
-      .boxSizing();
-      font-size: 15px;
-      color: #656771;
-      z-index: 10000;
-      &.active {
-        background: @primary;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    .boxSizing();
+    font-size: 15px;
+    color: #656771;
+    z-index: 10000;
+    &.active {
+      background: @primary;
+    }
+    .icon-left {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .header-search {
+      display: flex;
+      width: 76%;
+      line-height: 20px;
+      margin: 10px 0;
+      padding: 5px 0;
+      color: #232326;
+      background: #fff;
+      // background: #f7f7f7;
+      .borderRadius(20px);
+      .nbSearch {
+        padding: 0 5px 0 20px;
+        font-size: 17px;
       }
-      .icon-left {
-        font-size: 25px;
-        font-weight: bold;
+      .search-title {
+        font-size: 12px;
+        color: #666;
+        background: #fff;
+        // background: #f7f7f7;
       }
-      .header-search {
-        display: flex;
-        width: 76%;
-        line-height: 20px;
-        margin: 10px 0;
-        padding: 5px 0;
-        color: #232326;
-        background: #F7F7F7;
-        .borderRadius(20px);
-        .nbSearch {
-          padding: 0 5px 0 20px;
-          font-size: 17px;
-        }
-        .search-title {
-          font-size: 12px;
-          color: #666;
-          background: #F7F7F7;
-        }
     }
     .icon-More {
       font-size: 20px;
@@ -177,59 +289,70 @@ const changeTab = ({ name }) => {
       margin-top: 10px;
     }
   }
+  // van-tabs {
+  //   .borderRadius(20px);
+  // }
 }
-  .content {
-    height: calc(~"(100vh - 70px)");
-    overflow: hidden;
-    overflow-y: scroll; 
-    margin-top: 78px;
-  }
-  .product-list-refresh {
-    .product-item {
-      .fj();
-      width: 100%;
+.content {
+  height: calc(~"(100vh - 70px)");
+  overflow: hidden;
+  overflow-y: scroll;
+  // margin-top: 78px;
+  margin-top: 100px;
+}
+.product-list-refresh {
+  .product-item {
+    .fj();
+    width: 100%;
+    height: 140px;
+    padding: 10px 10px;
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+    div {
+      width: 120px;
       height: 120px;
-      padding: 10px 0;
-      border-bottom: 1px solid #dcdcdc;
+      border-radius: 10px;
+      overflow: hidden;
       img {
         width: 140px;
         height: 120px;
-        padding: 0 10px;
+        // padding: 0 10px;
         .boxSizing();
       }
-      .product-info {
-          width: 56%;
-          height: 120px;
-          padding: 5px;
-          text-align: left;
-          .boxSizing();
-          p {
-            margin: 0
-          }
-          .name {
-            width: 100%;
-            max-height: 40px;
-            line-height: 20px;
-            font-size: 15px;
-            color: #333;
-            overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: nowrap;
-          }
-          .subtitle {
-            width: 100%;
-            max-height: 20px;
-            padding: 10px 0;
-            line-height: 25px;
-            font-size: 13px;
-            color: #999;
-            overflow: hidden;
-          }
-          .price {
-            color: @primary;
-            font-size: 16px;
-          }
+    }
+    .product-info {
+      width: 56%;
+      height: 120px;
+      padding: 5px;
+      text-align: left;
+      .boxSizing();
+      p {
+        margin: 0;
       }
+      .name {
+        width: 100%;
+        max-height: 40px;
+        line-height: 20px;
+        font-size: 15px;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .subtitle {
+        width: 100%;
+        max-height: 20px;
+        padding: 10px 10;
+        line-height: 25px;
+        font-size: 13px;
+        color: #999;
+        overflow: hidden;
+      }
+      .price {
+        color: @primary;
+        font-size: 16px;
+      }
+    }
   }
   .empty {
     display: block;

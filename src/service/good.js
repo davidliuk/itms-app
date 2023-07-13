@@ -11,4 +11,3 @@ export function getCategory() {
 export function search(params) {
   return axios.get('/search', { params });
 }
-

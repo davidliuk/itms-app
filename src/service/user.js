@@ -9,7 +9,7 @@ export function EditUserInfo(params) {
 }
 
 export function login(params) {
-  return axios.post('/user/login', params);
+  return axios.post('/user/login/password', params);
 }
 
 export function logout() {

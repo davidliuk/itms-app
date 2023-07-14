@@ -221,10 +221,10 @@ const selectProduct = (item) => {
     }
   }
   .fade-out-enter-active, .fade-out-leave-active {
-    // transition: opacity 0.5s;
+    transition: opacity 0.5s;
   }
 
   .fade-out-enter, .fade-out-leave-to {
-    // opacity: 0;
+    opacity: 0;
   }
 </style>

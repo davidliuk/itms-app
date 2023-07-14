@@ -1,8 +1,10 @@
 
 <template>
   <div class="login">
-    <s-header :name="type == 'login' ? '登录' : '注册'" :back="'/home'"></s-header>
-    <img class="logo" src="https://s.yezgea02.com/1604045825972/newbee-mall-vue3-app-logo.png" alt="">
+    <!-- <s-header :name="state.type == 'login' ? '登录' : '注册'" :back="'/home'"></s-header> -->
+    <s-header :back="'/home'"></s-header>
+    <!-- <img class="logo" src="https://s.yezgea02.com/1604045825972/newbee-mall-vue3-app-logo.png" alt=""> -->
+    <img class="logo" src="/src/assets/logo.svg" alt="">
     <div v-if="state.type == 'login'" class="login-body login">
       <van-form @submit="onSubmit">
         <van-field
@@ -31,13 +33,26 @@
             <vue-img-verify ref="verifyRef" />
           </template>
         </van-field>
-        <div style="margin: 16px;">
-          <div class="link-register" @click="toggle('register')">立即注册</div>
+        <!-- <div style="margin: 16px;"> -->
+        <div>
           <van-button round block color="#1baeae" native-type="submit">登录</van-button>
+          <div class="toggle-link-group">
+            <div class="link-register" @click="toggle('register')">
+              新用户注册
+            </div>
+            <van-divider :style="{ borderColor: '#1989fa' }" vertical/>
+            <div class="link-register" @click="toggle('email')">
+              邮箱验证登录
+            </div>
+            <van-divider :style="{ borderColor: '#1989fa' }" vertical/>
+            <div class="link-register" @click="toggle('forget')">
+              忘记密码
+            </div>
+          </div>
         </div>
       </van-form>
     </div>
-    <div v-else class="login-body register">
+    <div v-else-if="state.type=='register'" class="login-body register">
       <van-form @submit="onSubmit">
         <van-field
           v-model="state.username1"
@@ -65,9 +80,72 @@
             <vue-img-verify ref="verifyRef" />
           </template>
         </van-field>
-        <div style="margin: 16px;">
-          <div class="link-login" @click="toggle('login')">已有登录账号</div>
+        <!-- <div style="margin: 16px;"> -->
+        <div>
           <van-button round block color="#1baeae" native-type="submit">注册</van-button>
+          <div class="toggle-link-group">
+            <div class="link-login" @click="toggle('login')">
+              账户密码登录
+            </div>
+            <van-divider :style="{ borderColor: '#1989fa' }" vertical/>
+            <div class="link-login" @click="toggle('email')">
+              邮箱验证登录
+            </div>
+          </div>
+        </div>
+      </van-form>
+    </div>
+    <div v-else class="login-body register">
+      <van-form @submit="onSubmit">
+        <van-field
+          v-model="state.email"
+          name="email"
+          label="邮箱"
+          placeholder="请输入邮箱"
+          :rules="[{ required: true, message: '请输入邮箱' }]"
+        />
+        <!-- <van-field
+          v-model="state.password1"
+          type="password"
+          name="password1"
+          label="密码"
+          placeholder="密码"
+          :rules="[{ required: true, message: '请填写密码' }]"
+        /> -->
+        <van-field
+          v-model="state.code"
+          center
+          clearable
+          label="邮箱验证码"
+          placeholder="请输入邮箱验证码"
+        >
+          <template #button>
+            <van-button size="small" type="primary">发送验证码</van-button>
+          </template>
+        </van-field>
+        <van-field
+          center
+          clearable
+          label="验证码"
+          placeholder="输入验证码"
+          v-model="state.verify"
+        >
+          <template #button>
+            <vue-img-verify ref="verifyRef" />
+          </template>
+        </van-field>
+        <!-- <div style="margin: 16px;"> -->
+        <div>
+          <van-button round block color="#1baeae" native-type="submit">注册</van-button>
+          <div class="toggle-link-group">
+            <div class="link-login" @click="toggle('login')">
+              账户密码登录
+            </div>
+            <van-divider :style="{ borderColor: '#1989fa' }" vertical/>
+            <div class="link-login" @click="toggle('register')">
+              新用户注册
+            </div>
+          </div>
         </div>
       </van-form>
     </div>
@@ -87,6 +165,8 @@ const state = reactive({
   username: '',
   password: '',
   username1: '',
+  email: '',
+  code: '',
   password1: '',
   type: 'login',
   imgCode: '',
@@ -95,7 +175,9 @@ const state = reactive({
 
 // 切换登录和注册两种模式
 const toggle = (v) => {
+  console.log(v)
   state.type = v
+  console.log(state.type)
   state.verify = ''
 }
 
@@ -108,15 +190,16 @@ const onSubmit = async (values) => {
   }
   if (state.type == 'login') {
     const { data } = await login({
-      "loginName": values.username,
-      "passwordMd5": md5(values.password)
+      "username": values.username,
+      "password": values.password
     })
-    setLocal('token', data)
+    console.log(data);
+    setLocal('token', data.token)
     // 需要刷新页面，否则 axios.js 文件里的 token 不会被重置
     window.location.href = '/'
   } else {
     await register({
-      "loginName": values.username1,
+      "username": values.username1,
       "password": values.password1
     })
     showSuccessToast('注册成功')
@@ -127,28 +210,60 @@ const onSubmit = async (values) => {
 </script>
 
 <style lang="less">
+  .toggle-link-group {
+    padding: 20px 30px;
+    padding-bottom: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    .link-register {
+      width: 70px;
+    }
+    .van-divider {
+      transform: rotate(90deg);
+      width: 20px;
+      height: px;
+    }
+  }
+  .van-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    border-radius: 25px;
+    height: 50px;
+    // overflow: hidden;
+  }
   .login {
     .logo {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
       width: 120px;
       height: 120px;
       display: block;
       margin: 80px auto 20px;
+      background: #fff;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .logo:hover {
+      transform: translateY(-5px);
     }
     .login-body {
       padding: 0 20px;
     }
     .login {
       .link-register {
-        font-size: 14px;
-        margin-bottom: 20px;
+        font-size: 10px;
+        // margin-bottom: 20px;
         color: #1989fa;
         display: inline-block;
       }
     }
     .register {
       .link-login {
-        font-size: 14px;
-        margin-bottom: 20px;
+        font-size: 10px;
+        // margin-bottom: 20px;
         color: #1989fa;
         display: inline-block;
       }

@@ -23,8 +23,6 @@ axios.interceptors.response.use((res) => {
     showFailToast("服务端异常！");
     return Promise.reject(res);
   }
-  console.log('+++++')
-  console.log(res.data.hasOwnProperty("resultCode"))
   // if (res.data.hasOwnProperty("resultCode")) {
   //   if (res.data.resultCode != 200) {
   //     if (res.data.message) showFailToast(res.data.message);
@@ -47,7 +45,7 @@ axios.interceptors.response.use((res) => {
         setLocal("token", res.data.data);
         axios.defaults.headers["token"] = res.data.data;
       }
-      return Promise.reject(res.data);
+      // return Promise.reject(res.data);
     }
   // }
 

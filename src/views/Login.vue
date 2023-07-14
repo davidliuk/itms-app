@@ -212,19 +212,26 @@ const onSubmit = async (values) => {
 <style lang="less">
   .toggle-link-group {
     padding: 20px 30px;
-    padding-bottom: 6rem;
+    // padding-bottom: 6rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
     text-align: center;
     .link-register {
       width: 70px;
+      color: var(--van-text-color-2);
     }
     .van-divider {
       transform: rotate(90deg);
-      width: 20px;
+      width: 10px;
       height: px;
     }
+  }
+  .login-body {
+    background: #fff;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding: 20px 20px;
   }
   .van-field {
     display: flex;
@@ -232,16 +239,21 @@ const onSubmit = async (values) => {
     margin-bottom: 25px;
     border-radius: 25px;
     height: 50px;
+    background: #f9f9f9;
     // overflow: hidden;
   }
   .login {
+    // background: #fff;
+    // border-top-left-radius: 20px;
+    // border-top-right-radius: 20px;
     .logo {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease;
       width: 120px;
       height: 120px;
       display: block;
-      margin: 80px auto 20px;
+      margin: 50px auto 50px;
+      padding: 5px;
       background: #fff;
       border-radius: 50%;
       overflow: hidden;
@@ -250,21 +262,23 @@ const onSubmit = async (values) => {
       transform: translateY(-5px);
     }
     .login-body {
-      padding: 0 20px;
+      padding: 20px 20px;
     }
     .login {
       .link-register {
+        width: 70px;
         font-size: 10px;
         // margin-bottom: 20px;
-        color: #1989fa;
+        color: var(--van-text-color-2);
         display: inline-block;
       }
     }
     .register {
       .link-login {
+        width: 70px;
         font-size: 10px;
         // margin-bottom: 20px;
-        color: #1989fa;
+        color: var(--van-text-color-2);
         display: inline-block;
       }
     }

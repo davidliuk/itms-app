@@ -13,9 +13,9 @@
           to="./product-list?from=home"
         />
       </div>
-      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin"
-        >登录</router-link
-      >
+      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">
+        登录
+      </router-link>
       <router-link class="login" tag="span" to="./user" v-else>
         <van-icon name="manager-o" />
       </router-link>

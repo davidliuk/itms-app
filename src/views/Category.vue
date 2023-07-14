@@ -4,9 +4,18 @@
     <div>
       <header class="category-header wrap van-hairline--bottom">
         <i class="nbicon nbfanhui" @click="goHome"></i>
-        <div class="header-search">
+        <!-- <div class="header-search">
           <i class="nbicon nbSearch"></i>
           <router-link tag="span" class="search-title" to="./product-list?from=category">全场50元起步</router-link>
+        </div> -->
+        <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
+          <span class="app-name">IDEA-TMS</span>
+          <i class="iconfont icon-search"></i>
+          <router-link
+            tag="span"
+            class="search-title"
+            to="./product-list?from=home"
+          />
         </div>
         <i class="iconfont icon-More"></i>
       </header>
@@ -112,8 +121,9 @@ const selectProduct = (item) => {
       .header-search {
         display: flex;
         width: 80%;
-        height: 20px;
-        line-height: 20px;
+        // height: 20px;
+        // line-height: 20px;
+        line-height: 0.53333rem;
         margin: 10px 0;
         padding: 5px 0;
         color: #232326;
@@ -122,6 +132,13 @@ const selectProduct = (item) => {
         .nbSearch {
           padding: 0 10px 0 20px;
           font-size: 17px;
+        }
+        .app-name {
+          padding: 0 10px;
+          color: @primary;
+          font-size: 20px;
+          font-weight: bold;
+          border-right: 1px solid #666;
         }
         .search-title {
           font-size: 12px;

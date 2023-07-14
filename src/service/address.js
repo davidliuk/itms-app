@@ -1,27 +1,33 @@
 import axios from '../utils/axios'
 
 export function addAddress(params) {
-  return axios.post('/address', params);
+  return axios.post('/api/user/address', params);
 }
 
 export function EditAddress(params) {
-  return axios.put('/address', params);
+  return axios.put('/api/user/address', params);
 }
 
 export function DeleteAddress(id) {
-  return axios.delete(`/address/${id}`);
+  return axios.delete(`/api/user/address/${id}`);
 }
 
-export function getDefaultAddress() {
-  return axios.get('/address/default');
-}
-
-export function getAddressList() {
-  return axios.get('/address', { pageNumber: 1, pageSize: 1000 })
+//设置默认地址
+export function setDefaultAddress(id) {
+  return axios.delete(`/api/user/address/default/${id}`);
 }
 
 export function getAddressDetail(id) {
-  return axios.get(`/address/${id}`)
+  return axios.get(`/api/user/address/${id}`)
 }
+
+export function getDefaultAddress() {
+  return axios.get('/api/user/address/default');
+}
+
+export function getAddressList() {
+  return axios.get('/api/user/address');
+}
+
 
 

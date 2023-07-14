@@ -104,6 +104,7 @@ const onSave = async (content) => {
   if (state.type == 'edit') {
     params['addressId'] = state.addressId
   }
+  addAddress(params);
   await state.type == 'add' ? addAddress(params) : EditAddress(params)
   showToast('保存成功')
   setTimeout(() => {

@@ -5,7 +5,7 @@
         <i class="nbicon nbfanhui" @click="goBack"></i>
         <div class="header-search">
           <i class="nbicon nbSearch"></i>
-          <input type="text" class="search-title" v-model="state.keyword" />
+          <input type="text" class="search-title" v-model="state.keyword" @keydown.enter="getSearch"/>
         </div>
         <span class="search-btn" @click="getSearch">搜索</span>
       </header>
@@ -331,13 +331,16 @@ const changeTab = ({ name }) => {
       }
       .name {
         width: 100%;
-        max-height: 40px;
+        // max-height: 40px;
         line-height: 20px;
         font-size: 15px;
         color: #333;
+        // white-space: nowrap;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
       }
       .subtitle {
         width: 100%;

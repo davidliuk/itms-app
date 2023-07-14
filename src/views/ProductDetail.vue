@@ -22,18 +22,39 @@
           <!-- <span>库存203</span> -->
         </div>
       </div>
-      <div class="product-intro">
+      <!-- <van-sticky :offset-top="50" scrollspy> -->
+        <van-tabs :offset-top="44" scrollspy sticky>
+          <van-tab title="参数">
+            <div
+              class="product-content"
+              v-html="state.detail.goodsDetailContent || ''"
+            />
+          </van-tab>
+          <van-tab title="库存">
+            <div
+              class="product-content"
+              v-html="state.detail.goodsDetailContent || ''"
+            />
+          </van-tab>
+          <van-tab title="详情">
+            <div
+              class="product-content"
+              v-html="state.detail.goodsDetailContent || ''"
+            />
+          </van-tab>
+          <!-- <van-tab v-for="index in 8" :title="'选项 ' + index">
+            内容 {{ index }}
+          </van-tab> -->
+        </van-tabs>
+      <!-- </van-sticky> -->
+      <!-- <div class="product-intro">
         <ul>
           <li>概述</li>
           <li>参数</li>
           <li>安装服务</li>
           <li>常见问题</li>
         </ul>
-        <div
-          class="product-content"
-          v-html="state.detail.goodsDetailContent || ''"
-        ></div>
-      </div>
+      </div> -->
     </div>
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" />
@@ -113,6 +134,9 @@ const goToCart = async () => {
 <style lang="less">
 @import "../common/style/mixin";
 .product-detail {
+  s-header {
+    background: rgba(255, 255, 255, 0.7);
+  }
   .detail-header {
     position: fixed;
     top: 0;
@@ -124,7 +148,7 @@ const goToCart = async () => {
     padding: 0 10px;
     .boxSizing();
     color: #252525;
-    background: #fff;
+    // background: #fff;
     border-bottom: 1px solid #dcdcdc;
     .product-name {
       font-size: 14px;
@@ -144,7 +168,11 @@ const goToCart = async () => {
     }
     .product-info {
       padding: 0 10px;
+      margin: 10px 10px;
+      background: white;
+      border-radius: 20px;
       .product-title {
+        padding-top: 20px;
         font-size: 18px;
         text-align: left;
         color: #333;
@@ -156,6 +184,7 @@ const goToCart = async () => {
         padding: 5px 0;
       }
       .product-price {
+        padding-bottom: 10px;
         .fj();
         span:nth-child(1) {
           color: #f63515;

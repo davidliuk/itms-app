@@ -1,10 +1,11 @@
 <template>
   <div>
     <header class="home-header wrap" :class="{ active: state.headerScroll }">
-      <router-link tag="i" to="./category"
-        ><i class="nbicon nbmenu2"></i
-      ></router-link>
+      <router-link tag="i" to="./category">
+        <i class="nbicon nbmenu2"></i>
+      </router-link>
       <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
+        <img src="/src/assets/logo.svg"/>
         <span class="app-name">iTMS</span>
         <i class="iconfont icon-search"></i>
         <router-link
@@ -32,13 +33,32 @@
         <span>{{ item.name }}</span>
       </div>
     </div>
+    <div class="good" v-if="state.newPersonSkuList.length != 0">
+      <header class="good-header">新人专享</header>
+      <van-skeleton title :row="3" :loading="state.loading">
+        <div class="good-box">
+          <div
+            class="good-item"
+            v-for="item in state.newSkuList"
+            :key="item.goodsId"
+            @click="goToDetail(item)"
+          >
+            <img :src="$filters.prefix(item.goodsCoverImg)" alt="" />
+            <div class="good-desc">
+              <div class="title">{{ item.goodsName }}</div>
+              <div class="price">¥ {{ item.sellingPrice }}</div>
+            </div>
+          </div>
+        </div>
+      </van-skeleton>
+    </div>
     <div class="good">
       <header class="good-header">新品上线</header>
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div
             class="good-item"
-            v-for="item in state.newGoodses"
+            v-for="item in state.newSkuList"
             :key="item.goodsId"
             @click="goToDetail(item)"
           >
@@ -57,7 +77,7 @@
         <div class="good-box">
           <div
             class="good-item"
-            v-for="item in state.hots"
+            v-for="item in state.hotSkuList"
             :key="item.goodsId"
             @click="goToDetail(item)"
           >
@@ -107,8 +127,9 @@ const state = reactive({
   swiperList: [], // 轮播图列表
   isLogin: false, // 是否已登录
   headerScroll: false, // 滚动透明判断
-  hots: [],
-  newGoodses: [],
+  hotSkuList: [],
+  newPersonSkuList: [],
+  newSkuList: [],
   recommends: [],
   categoryList: [
     {
@@ -186,11 +207,11 @@ onMounted(async () => {
   });
   const { data } = await getHome();
   state.swiperList = data.carousels;
-  state.newGoodses = data.newGoodses;
-  if (state.newGoodses.length % 2 == 1) {
-    state.newGoodses.pop();
+  state.newSkuList = data.newSkuList;
+  if (state.newSkuList != null && state.newSkuList.length % 2 == 1) {
+    state.newSkuList.pop();
   }
-  state.hots = data.hotGoodses;
+  state.hotSkuList = data.hotGoodses;
   state.recommends = data.recommendGoodses;
   state.loading = false;
   closeToast();

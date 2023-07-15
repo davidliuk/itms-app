@@ -2,7 +2,12 @@
   <div class="nav-bar van-hairline--top">
     <ul class="nav-list">
       <router-link class="nav-list-item active" to="home">
-        <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
+        <!-- <i class="nbicon nblvsefenkaicankaoxianban-1"></i> -->
+        <i>
+          <van-icon 
+            name="home-o" 
+          />
+        </i>
         <span>首页</span>
       </router-link>
       <router-link class="nav-list-item" to="category">
@@ -10,15 +15,21 @@
         <span>分类</span>
       </router-link>
       <router-link class="nav-list-item" to="cart">
-        <i
-          ><van-icon
+        <i>
+          <van-icon
             name="shopping-cart-o"
             :badge="!cart.count ? '' : cart.count"
-        /></i>
+          />
+        </i>
         <span>购物车</span>
       </router-link>
       <router-link class="nav-list-item" to="user">
-        <i class="nbicon nblvsefenkaicankaoxianban-"></i>
+        <!-- <i class="nbicon nblvsefenkaicankaoxianban-"></i> -->
+        <i>
+          <van-icon 
+            name="manager-o" 
+          />
+        </i>
         <span>我的</span>
       </router-link>
     </ul>
@@ -75,6 +86,10 @@ onMounted(() => {
         font-size: 12px;
       }
       .van-icon-shopping-cart-o {
+        margin: 0 auto;
+        margin-bottom: 2px;
+      }
+      .van-icon-manager-o {
         margin: 0 auto;
         margin-bottom: 2px;
       }

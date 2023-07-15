@@ -20,14 +20,28 @@
         <span>我的订单</span>
         <van-icon name="arrow" />
       </li> -->
-      <li class="van-hairline--bottom" @click="goTo('/setting')">
-        <span>账号管理</span>
-        <van-icon name="arrow" />
-      </li>
-      <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
-        <span>地址管理</span>
-        <van-icon name="arrow" />
-      </li>
+      <div>
+        <li class="van-hairline--bottom" @click="goTo('/coupon')">
+          <span>优惠券</span>
+          <van-icon name="arrow" />
+        </li>
+        <li class="van-hairline--bottom" @click="goTo('/collect')">
+          <span>我的收藏</span>
+          <van-icon name="arrow" />
+        </li>
+        <li class="van-hairline--bottom" @click="goTo('/footprint')">
+          <span>我的足迹</span>
+          <van-icon name="arrow" />
+        </li>
+        <li class="van-hairline--bottom" @click="goTo('/setting')">
+          <span>账号管理</span>
+          <van-icon name="arrow" />
+        </li>
+        <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
+          <span>地址管理</span>
+          <van-icon name="arrow" />
+        </li>
+      </div>
     </ul>
     <nav-bar></nav-bar>
   </div>
@@ -145,6 +159,7 @@ const goTo = (r, query) => {
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
       padding: 20px 20px;
+      height: 72vh;
       li {
         margin: 10px;
         height: 40px;
@@ -155,6 +170,12 @@ const goTo = (r, query) => {
         .van-icon-arrow {
           margin-top: 13px;
         }
+      }
+      div {
+        background: #fff;
+        border-radius: 20px;
+        margin-top: 10px;
+        padding: 5px 10px;
       }
     }
   }

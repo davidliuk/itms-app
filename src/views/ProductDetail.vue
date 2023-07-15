@@ -26,7 +26,6 @@
         </div>
         <div class="product-title text-container">
           {{ state.detail.skuName || "" }}
-          事实上生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世
         </div>
         <div class="product-desc">iTMS - 灵创物运 优选商品</div>
         <!-- <div class="product-price">

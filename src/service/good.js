@@ -11,6 +11,10 @@ export function getCategory() {
   return axios.get('/categories');
 }
 
-export function search(params) {
-  return axios.get('/search', { params });
+// export function search(params) {
+//   return axios.get('/search', { params });
+// }
+
+export function search(page, limit, params) {
+  return axios.post(`/search/sku/${page}/${limit}`, params);
 }

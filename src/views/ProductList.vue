@@ -4,7 +4,10 @@
       <header class="category-header wrap">
         <i class="nbicon nbfanhui" @click="goBack"></i>
         <div class="header-search">
-          <i class="nbicon nbSearch"></i>
+          <!-- <i class="nbicon nbSearch"></i> -->
+          <van-icon  class="nbSearch"
+            name="search" 
+          />
           <input type="text" class="search-title" v-model="state.keyword" @keydown.enter="getSearch"/>
         </div>
         <span class="search-btn" @click="getSearch">搜索</span>
@@ -44,11 +47,11 @@
               :key="index"
               @click="productDetail(item)"
             >
-              <div><img :src="$filters.prefix(item.goodsCoverImg)" /></div>
+              <div><img :src="$filters.prefix(item.imgUrl)" /></div>
               <div class="product-info">
-                <p class="name">{{ item.goodsName }}</p>
-                <p class="subtitle">{{ item.goodsIntro }}</p>
-                <span class="price">￥ {{ item.sellingPrice }}</span>
+                <p class="name">{{ item.title }}</p>
+                <p class="subtitle">{{ item.keyword }}</p>
+                <span class="price">￥ {{ item.price }}</span>
               </div>
             </div>
           </template>
@@ -90,14 +93,15 @@ const init = async () => {
     state.loading = false;
     return;
   }
+  
   const {
     data,
-    data: { list },
-  } = await search({
-    pageNumber: state.page,
-    goodsCategoryId: categoryId,
+    data: { content },
+  } = await search(state.page, 10, {
+    categoryId: categoryId,
+    // wareId: categoryId,
     keyword: state.keyword,
-    orderBy: state.orderBy,
+    // orderBy: state.orderBy,
   });
   const data1 = {
     "totalCount": 151,
@@ -106,82 +110,82 @@ const init = async () => {
     "currPage": 1,
     "list": [
         {
-            "goodsId": 10159,
-            "goodsName": "Apple AirPods 配充电盒",
-            "goodsIntro": "苹果蓝牙耳机",
-            "goodsCoverImg": "/goods-img/53c9f268-7cd4-4fac-909c-2dc066625655.jpg",
-            "sellingPrice": 1246
+            "id": 10159,
+            "title": "Apple AirPods 配充电盒",
+            "keyword": "苹果蓝牙耳机",
+            "imgUrl": "/goods-img/53c9f268-7cd4-4fac-909c-2dc066625655.jpg",
+            "price": 1246
         },
         {
-            "goodsId": 10160,
-            "goodsName": "小米 Redmi AirDots",
-            "goodsIntro": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
-            "goodsCoverImg": "/goods-img/c47403f1-b706-453b-88d8-2bfdee0316be.jpg",
-            "sellingPrice": 129
+            "id": 10160,
+            "title": "小米 Redmi AirDots",
+            "keyword": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
+            "imgUrl": "/goods-img/c47403f1-b706-453b-88d8-2bfdee0316be.jpg",
+            "price": 129
         },
         {
-            "goodsId": 10166,
-            "goodsName": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
-            "goodsIntro": "新蜂精选",
-            "goodsCoverImg": "/goods-img/70dc1586-13bd-4b4c-92a9-fe20aa1d531f.jpg",
-            "sellingPrice": 199
+            "id": 10166,
+            "title": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
+            "keyword": "新蜂精选",
+            "imgUrl": "/goods-img/70dc1586-13bd-4b4c-92a9-fe20aa1d531f.jpg",
+            "price": 199
         },
         {
-            "goodsId": 10175,
-            "goodsName": "雷蛇 Razer 北海巨妖标准版X",
-            "goodsIntro": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
-            "goodsCoverImg": "/goods-img/7345c467-6c2d-4f30-a73d-83d675d5208c.jpg",
-            "sellingPrice": 299
+            "id": 10175,
+            "title": "雷蛇 Razer 北海巨妖标准版X",
+            "keyword": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
+            "imgUrl": "/goods-img/7345c467-6c2d-4f30-a73d-83d675d5208c.jpg",
+            "price": 299
         },
         {
-            "goodsId": 10179,
-            "goodsName": "Apple 采用Lightning/闪电接头的 EarP...",
-            "goodsIntro": "耳机",
-            "goodsCoverImg": "/goods-img/bf6ccbc4-d0d0-4fbb-b975-4becb9cb38f4.jpg",
-            "sellingPrice": 223
+            "id": 10179,
+            "title": "Apple 采用Lightning/闪电接头的 EarP...",
+            "keyword": "耳机",
+            "imgUrl": "/goods-img/bf6ccbc4-d0d0-4fbb-b975-4becb9cb38f4.jpg",
+            "price": 223
         },
         {
-            "goodsId": 10180,
-            "goodsName": "Apple AirPods 配充电盒",
-            "goodsIntro": "苹果蓝牙耳机",
-            "goodsCoverImg": "/goods-img/64768a8d-0664-4b29-88c9-2626578ffbd1.jpg",
-            "sellingPrice": 1246
+            "id": 10180,
+            "title": "Apple AirPods 配充电盒",
+            "keyword": "苹果蓝牙耳机",
+            "imgUrl": "/goods-img/64768a8d-0664-4b29-88c9-2626578ffbd1.jpg",
+            "price": 1246
         },
         {
-            "goodsId": 10181,
-            "goodsName": "小米 Redmi AirDots",
-            "goodsIntro": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
-            "goodsCoverImg": "/goods-img/36d0fe8f-aa28-423c-81e7-82cab31b7598.jpg",
-            "sellingPrice": 129
+            "id": 10181,
+            "title": "小米 Redmi AirDots",
+            "keyword": "真无线蓝牙耳机|分体式耳机 |收纳充电盒 |蓝牙5.0 |按...",
+            "imgUrl": "/goods-img/36d0fe8f-aa28-423c-81e7-82cab31b7598.jpg",
+            "price": 129
         },
         {
-            "goodsId": 10187,
-            "goodsName": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
-            "goodsIntro": "新蜂精选",
-            "goodsCoverImg": "/goods-img/1e5645d1-24cb-48eb-9aaa-f729fa0db195.jpg",
-            "sellingPrice": 199
+            "id": 10187,
+            "title": "【自营仓次日达】moloke真无线蓝牙耳机双耳适用于苹果...",
+            "keyword": "新蜂精选",
+            "imgUrl": "/goods-img/1e5645d1-24cb-48eb-9aaa-f729fa0db195.jpg",
+            "price": 199
         },
         {
-            "goodsId": 10196,
-            "goodsName": "雷蛇 Razer 北海巨妖标准版X",
-            "goodsIntro": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
-            "goodsCoverImg": "/goods-img/0cc81546-1408-4140-af95-0341a7778b6c.jpg",
-            "sellingPrice": 299
+            "id": 10196,
+            "title": "雷蛇 Razer 北海巨妖标准版X",
+            "keyword": "北海巨妖标准版升级款 头戴式游戏耳机 电竞耳麦 7.1 电脑...",
+            "imgUrl": "/goods-img/0cc81546-1408-4140-af95-0341a7778b6c.jpg",
+            "price": 299
         },
         {
-            "goodsId": 10200,
-            "goodsName": "Apple 采用Lightning/闪电接头的 EarP...",
-            "goodsIntro": "耳机",
-            "goodsCoverImg": "/goods-img/7b8bcf01-0abe-4155-b1f4-e57a6b8fc36a.jpg",
-            "sellingPrice": 223
+            "id": 10200,
+            "title": "Apple 采用Lightning/闪电接头的 EarP...",
+            "keyword": "耳机",
+            "imgUrl": "/goods-img/7b8bcf01-0abe-4155-b1f4-e57a6b8fc36a.jpg",
+            "price": 223
         }
     ]
 }
 
-  state.productList = state.productList.concat(list);
-  state.totalPage = data.totalPage;
+  state.productList = state.productList.concat(content);
+  state.totalPage = data.totalPages;
   state.loading = false;
-  if (state.page >= data.totalPage) state.finished = true;
+  if (state.page >= data.totalPages) state.finished = true;
 };
 
 const goBack = () => {
@@ -189,7 +193,7 @@ const goBack = () => {
 };
 
 const productDetail = (item) => {
-  router.push({ path: `/product/${item.goodsId}` });
+  router.push({ path: `/product/${item.id}` });
 };
 
 const getSearch = () => {
@@ -265,7 +269,7 @@ const changeTab = ({ name }) => {
       // background: #f7f7f7;
       .borderRadius(20px);
       .nbSearch {
-        padding: 0 5px 0 20px;
+        padding: 2px 5px 0 20px;
         font-size: 17px;
       }
       .search-title {

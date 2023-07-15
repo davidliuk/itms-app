@@ -5,7 +5,7 @@
         <i class="nbicon nbmenu2"></i>
       </router-link>
       <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
-        <img src="/src/assets/logo.svg"/>
+        <img src="/src/assets/logo.svg" style="padding-left: 10px;"/>
         <span class="app-name">iTMS</span>
         <i class="iconfont icon-search"></i>
         <router-link
@@ -153,12 +153,12 @@ const state = reactive({
         "https://s.yezgea02.com/1604041127880/%E6%9C%8D%E9%A5%B0%402x.png",
       categoryId: 100003,
     },
-    {
-      name: "全球购",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E5%85%A8%E7%90%83%E8%B4%AD%402x.png",
-      categoryId: 100002,
-    },
+    // {
+    //   name: "全球购",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E5%85%A8%E7%90%83%E8%B4%AD%402x.png",
+    //   categoryId: 100002,
+    // },
     {
       name: "灵创生鲜",
       imgUrl:
@@ -171,29 +171,29 @@ const state = reactive({
         "https://s.yezgea02.com/1604041127880/%E5%88%B0%E5%AE%B6%402x.png",
       categoryId: 100005,
     },
-    {
-      name: "充值缴费",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E5%85%85%E5%80%BC%402x.png",
-      categoryId: 100006,
-    },
-    {
-      name: "9.9元拼",
-      imgUrl: "https://s.yezgea02.com/1604041127880/9.9%402x.png",
-      categoryId: 100007,
-    },
-    {
-      name: "领劵",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E9%A2%86%E5%88%B8%402x.png",
-      categoryId: 100008,
-    },
-    {
-      name: "省钱",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E7%9C%81%E9%92%B1%402x.png",
-      categoryId: 100009,
-    },
+    // {
+    //   name: "充值缴费",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E5%85%85%E5%80%BC%402x.png",
+    //   categoryId: 100006,
+    // },
+    // {
+    //   name: "9.9元拼",
+    //   imgUrl: "https://s.yezgea02.com/1604041127880/9.9%402x.png",
+    //   categoryId: 100007,
+    // },
+    // {
+    //   name: "领劵",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E9%A2%86%E5%88%B8%402x.png",
+    //   categoryId: 100008,
+    // },
+    // {
+    //   name: "省钱",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E7%9C%81%E9%92%B1%402x.png",
+    //   categoryId: 100009,
+    // },
     {
       name: "全部",
       imgUrl:
@@ -214,8 +214,10 @@ onMounted(async () => {
     message: "加载中...",
     forbidClick: true,
   });
-  // const { data } = await getHome();
-  const data = toData;
+  const { data } = await getHome();
+  if (data == null) {
+    data = toData;
+  }
   state.swiperList = data.carousels;
   state.newSkuList = data.newSkuList;
   if (state.newSkuList != null && state.newSkuList.length % 2 == 1) {

@@ -5,7 +5,7 @@
         ><i class="nbicon nbmenu2"></i
       ></router-link>
       <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
-        <span class="app-name">IDEA-TMS</span>
+        <span class="app-name">iTMS</span>
         <i class="iconfont icon-search"></i>
         <router-link
           tag="span"

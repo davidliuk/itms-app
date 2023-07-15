@@ -8,8 +8,11 @@ export function modifyCart(params) {
   return axios.put('/shop-cart', params);
 }
 
+// export function getCart(params) {
+//   return axios.get('/shop-cart', { params });
+// }
 export function getCart(params) {
-  return axios.get('/shop-cart', { params });
+  return axios.get('/cart/cartList', { params });
 }
 
 export function deleteCartItem(id) {

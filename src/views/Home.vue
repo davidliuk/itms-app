@@ -5,7 +5,7 @@
         ><i class="nbicon nbmenu2"></i
       ></router-link>
       <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
-        <span class="app-name">IDEA-TMS</span>
+        <span class="app-name">iTMS</span>
         <i class="iconfont icon-search"></i>
         <router-link
           tag="span"
@@ -13,9 +13,9 @@
           to="./product-list?from=home"
         />
       </div>
-      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin"
-        >登录</router-link
-      >
+      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">
+        登录
+      </router-link>
       <router-link class="login" tag="span" to="./user" v-else>
         <van-icon name="manager-o" />
       </router-link>

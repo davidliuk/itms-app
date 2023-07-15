@@ -9,7 +9,7 @@
           <router-link tag="span" class="search-title" to="./product-list?from=category">全场50元起步</router-link>
         </div> -->
         <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
-          <span class="app-name">IDEA-TMS</span>
+          <span class="app-name">iTMS</span>
           <i class="iconfont icon-search"></i>
           <router-link
             tag="span"
@@ -221,10 +221,10 @@ const selectProduct = (item) => {
     }
   }
   .fade-out-enter-active, .fade-out-leave-active {
-    // transition: opacity 0.5s;
+    transition: opacity 0.5s;
   }
 
   .fade-out-enter, .fade-out-leave-to {
-    // opacity: 0;
+    opacity: 0;
   }
 </style>

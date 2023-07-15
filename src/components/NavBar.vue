@@ -64,6 +64,8 @@ onMounted(() => {
   background: #fff;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   .nav-list {
     width: 100%;
     .fj();

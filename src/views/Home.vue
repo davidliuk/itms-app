@@ -5,7 +5,7 @@
         <i class="nbicon nbmenu2"></i>
       </router-link>
       <div class="header-search" @click="router.push({ path: '/product-list?from=home' })">
-        <img src="/src/assets/logo.svg"/>
+        <img src="/src/assets/logo.svg" style="padding-left: 10px;"/>
         <span class="app-name">iTMS</span>
         <i class="iconfont icon-search"></i>
         <router-link
@@ -22,15 +22,17 @@
       </router-link>
     </header>
     <nav-bar />
-    <swiper :list="state.swiperList"></swiper>
-    <div class="category-list">
-      <div
-        v-for="item in state.categoryList"
-        v-bind:key="item.categoryId"
-        @click="tips"
-      >
-        <img :src="item.imgUrl" />
-        <span>{{ item.name }}</span>
+    <swiper :list="state.newSkuList"></swiper>
+    <div class="category-wrapper">
+      <div class="category-list">
+        <div
+          v-for="item in state.categoryList"
+          v-bind:key="item.categoryId"
+          @click="tips"
+        >
+          <img :src="item.imgUrl" />
+          <span>{{ item.name }}</span>
+        </div>
       </div>
     </div>
     <div class="good" v-if="state.newPersonSkuList.length != 0">
@@ -40,13 +42,13 @@
           <div
             class="good-item"
             v-for="item in state.newSkuList"
-            :key="item.goodsId"
+            :key="item.id"
             @click="goToDetail(item)"
           >
-            <img :src="$filters.prefix(item.goodsCoverImg)" alt="" />
+            <img :src="item.imgUrl" alt="" />
             <div class="good-desc">
-              <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
+              <div class="title">{{ item.title }}</div>
+              <div class="price">¥ {{ item.price }}</div>
             </div>
           </div>
         </div>
@@ -59,13 +61,19 @@
           <div
             class="good-item"
             v-for="item in state.newSkuList"
-            :key="item.goodsId"
+            :key="item.id"
             @click="goToDetail(item)"
           >
-            <img :src="$filters.prefix(item.goodsCoverImg)" alt="" />
+            <img :src="item.imgUrl" alt="" />
             <div class="good-desc">
-              <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
+              <div class="title">{{ item.skuName }}</div>
+              <div class="price-desc">
+                <div class="price-yuan">¥</div>
+                <div class="price">{{ Math.floor(item.price) }}</div>
+                <div class="price-yuan">{{ (item.price % 1).toFixed(2).substring(1, 4) }}</div>
+                <div class="market-price">&nbsp; &nbsp; 市场价</div>
+                <div class="market-price">&nbsp; ¥ {{ item.marketPrice.toFixed(2) }}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -78,13 +86,14 @@
           <div
             class="good-item"
             v-for="item in state.hotSkuList"
-            :key="item.goodsId"
+            :key="item.id"
             @click="goToDetail(item)"
           >
-            <img :src="$filters.prefix(item.goodsCoverImg)" alt="" />
+            <img :src="item.imgUrl" alt="" />
             <div class="good-desc">
-              <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
+              <div class="title">{{ item.title }}</div>
+              <div class="price">¥ {{ item.price.toFixed(2) }}</div>
+              
             </div>
           </div>
         </div>
@@ -97,13 +106,13 @@
           <div
             class="good-item"
             v-for="item in state.recommends"
-            :key="item.goodsId"
+            :key="item.id"
             @click="goToDetail(item)"
           >
-            <img :src="$filters.prefix(item.goodsCoverImg)" alt="" />
+            <img :src="item.imgUrl" alt="" />
             <div class="good-desc">
-              <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
+              <div class="title">{{ item.title }}</div>
+              <div class="price">¥ {{ item.price }}</div>
             </div>
           </div>
         </div>
@@ -144,12 +153,12 @@ const state = reactive({
         "https://s.yezgea02.com/1604041127880/%E6%9C%8D%E9%A5%B0%402x.png",
       categoryId: 100003,
     },
-    {
-      name: "全球购",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E5%85%A8%E7%90%83%E8%B4%AD%402x.png",
-      categoryId: 100002,
-    },
+    // {
+    //   name: "全球购",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E5%85%A8%E7%90%83%E8%B4%AD%402x.png",
+    //   categoryId: 100002,
+    // },
     {
       name: "灵创生鲜",
       imgUrl:
@@ -162,29 +171,29 @@ const state = reactive({
         "https://s.yezgea02.com/1604041127880/%E5%88%B0%E5%AE%B6%402x.png",
       categoryId: 100005,
     },
-    {
-      name: "充值缴费",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E5%85%85%E5%80%BC%402x.png",
-      categoryId: 100006,
-    },
-    {
-      name: "9.9元拼",
-      imgUrl: "https://s.yezgea02.com/1604041127880/9.9%402x.png",
-      categoryId: 100007,
-    },
-    {
-      name: "领劵",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E9%A2%86%E5%88%B8%402x.png",
-      categoryId: 100008,
-    },
-    {
-      name: "省钱",
-      imgUrl:
-        "https://s.yezgea02.com/1604041127880/%E7%9C%81%E9%92%B1%402x.png",
-      categoryId: 100009,
-    },
+    // {
+    //   name: "充值缴费",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E5%85%85%E5%80%BC%402x.png",
+    //   categoryId: 100006,
+    // },
+    // {
+    //   name: "9.9元拼",
+    //   imgUrl: "https://s.yezgea02.com/1604041127880/9.9%402x.png",
+    //   categoryId: 100007,
+    // },
+    // {
+    //   name: "领劵",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E9%A2%86%E5%88%B8%402x.png",
+    //   categoryId: 100008,
+    // },
+    // {
+    //   name: "省钱",
+    //   imgUrl:
+    //     "https://s.yezgea02.com/1604041127880/%E7%9C%81%E9%92%B1%402x.png",
+    //   categoryId: 100009,
+    // },
     {
       name: "全部",
       imgUrl:
@@ -206,6 +215,9 @@ onMounted(async () => {
     forbidClick: true,
   });
   const { data } = await getHome();
+  if (data == null) {
+    data = toData;
+  }
   state.swiperList = data.carousels;
   state.newSkuList = data.newSkuList;
   if (state.newSkuList != null && state.newSkuList.length % 2 == 1) {
@@ -216,6 +228,409 @@ onMounted(async () => {
   state.loading = false;
   closeToast();
 });
+
+const toData = {
+    "newSkuList": [
+        {
+            "id": 13,
+            "createTime": "2021-08-14 05:51:50",
+            "updateTime": "2023-04-12 21:23:47",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "蔬菜拼盘",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/shucaipingpan.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 0,
+            "sort": 13,
+            "skuCode": "0013",
+            "price": 50,
+            "marketPrice": 70,
+            "skuWareList": null
+        },
+        {
+            "id": 12,
+            "createTime": "2021-08-14 05:28:16",
+            "updateTime": "2023-04-12 21:23:02",
+            "param": {},
+            "categoryId": 2,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "橘子",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/juzi.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 0,
+            "sort": 12,
+            "skuCode": "0012",
+            "price": 7,
+            "marketPrice": 8,
+            "skuWareList": null
+        },
+        {
+            "id": 11,
+            "createTime": "2021-08-14 05:26:30",
+            "updateTime": "2023-04-25 03:36:33",
+            "param": {},
+            "categoryId": 2,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "苹果",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/pngguo.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 0,
+            "sort": 11,
+            "skuCode": "0011",
+            "price": 5,
+            "marketPrice": 7,
+            "skuWareList": null
+        },
+        {
+            "id": 10,
+            "createTime": "2021-08-14 05:02:56",
+            "updateTime": "2023-04-25 04:36:23",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "南瓜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/nangua.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 10,
+            "skuCode": "555667",
+            "price": 5,
+            "marketPrice": 4,
+            "skuWareList": null
+        },
+        {
+            "id": 6,
+            "createTime": "2021-06-06 02:13:46",
+            "updateTime": "2023-04-26 21:39:32",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "丝瓜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/sigua.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 6,
+            "skuCode": "0006",
+            "price": 3.6,
+            "marketPrice": 4.5,
+            "skuWareList": null
+        },
+        {
+            "id": 5,
+            "createTime": "2021-06-06 02:10:56",
+            "updateTime": "2023-04-25 05:34:26",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "土豆",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/tudou.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 5,
+            "skuCode": "0005",
+            "price": 5.3,
+            "marketPrice": 5.9,
+            "skuWareList": null
+        },
+        {
+            "id": 4,
+            "createTime": "2021-06-06 02:09:42",
+            "updateTime": "2023-07-13 10:12:11",
+            "param": {},
+            "categoryId": 2,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "大蒜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/dasuan.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 0,
+            "sort": 4,
+            "skuCode": "0004",
+            "price": 5.5,
+            "marketPrice": 7.8,
+            "skuWareList": null
+        },
+        {
+            "id": 3,
+            "createTime": "2021-06-06 02:05:57",
+            "updateTime": "2023-04-24 19:46:13",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "四季豆",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/sijidou.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 0,
+            "sort": 3,
+            "skuCode": "0003",
+            "price": 3.5,
+            "marketPrice": 4.1,
+            "skuWareList": null
+        }
+    ],
+    "newPersonSkuList": [
+        {
+            "id": 5,
+            "createTime": "2021-06-06 02:10:56",
+            "updateTime": "2023-04-25 05:34:26",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "土豆",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/tudou.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 5,
+            "skuCode": "0005",
+            "price": 5.3,
+            "marketPrice": 5.9,
+            "skuWareList": null
+        },
+        {
+            "id": 6,
+            "createTime": "2021-06-06 02:13:46",
+            "updateTime": "2023-04-26 21:39:32",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "丝瓜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/sigua.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 6,
+            "skuCode": "0006",
+            "price": 3.6,
+            "marketPrice": 4.5,
+            "skuWareList": null
+        },
+        {
+            "id": 10,
+            "createTime": "2021-08-14 05:02:56",
+            "updateTime": "2023-04-25 04:36:23",
+            "param": {},
+            "categoryId": 1,
+            "attrGroupId": 1,
+            "supplierId": 0,
+            "supplierName": 0,
+            "skuType": 0,
+            "skuName": "南瓜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/nangua.jpg",
+            "perLimit": 5,
+            "publishStatus": 1,
+            "checkStatus": 1,
+            "isNewPerson": 1,
+            "sort": 10,
+            "skuCode": "555667",
+            "price": 5,
+            "marketPrice": 4,
+            "skuWareList": null
+        }
+    ],
+    "hotSkuList": [
+        {
+            "id": 1,
+            "keyword": "西红柿,新鲜蔬菜",
+            "skuType": 0,
+            "isNewPerson": 0,
+            "categoryId": 1,
+            "categoryName": "新鲜蔬菜",
+            "imgUrl": "https://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/xihongshi.jpg",
+            "title": "西红柿",
+            "price": 2.2,
+            "stock": null,
+            "sale": null,
+            "wareId": null,
+            "perLimit": 5,
+            "hotScore": 0,
+            "ruleList": null
+        }
+    ],
+    "categoryList": [
+        {
+            "id": 1,
+            "createTime": "2021-06-06 01:36:18",
+            "updateTime": "2023-04-12 21:35:08",
+            "param": {},
+            "name": "新鲜蔬菜",
+            "imgUrl": "\r\nhttps://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/xinxianshucai.jpg",
+            "parentId": null,
+            "status": null,
+            "sort": 1
+        },
+        {
+            "id": 2,
+            "createTime": "2021-06-06 01:36:45",
+            "updateTime": "2023-04-12 21:35:57",
+            "param": {},
+            "name": "时令水果",
+            "imgUrl": "\r\nhttps://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/shilingshuiguo.jpg",
+            "parentId": null,
+            "status": null,
+            "sort": 2
+        },
+        {
+            "id": 3,
+            "createTime": "2021-06-06 01:37:22",
+            "updateTime": "2023-04-12 21:35:57",
+            "param": {},
+            "name": "肉禽蛋品",
+            "imgUrl": "\r\nhttps://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/rouqindanpin.jpg",
+            "parentId": null,
+            "status": null,
+            "sort": 3
+        },
+        {
+            "id": 4,
+            "createTime": "2021-06-06 01:37:42",
+            "updateTime": "2023-04-12 21:35:57",
+            "param": {},
+            "name": "海鲜水产",
+            "imgUrl": "\r\nhttps://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/haixianshuichan.jpg",
+            "parentId": null,
+            "status": null,
+            "sort": 4
+        },
+        {
+            "id": 5,
+            "createTime": "2021-06-06 01:38:07",
+            "updateTime": "2023-04-12 21:35:08",
+            "param": {},
+            "name": "速食冻品",
+            "imgUrl": "\r\nhttps://ssyx-guigu.oss-cn-beijing.aliyuncs.com/img/sudongshuiping.jpg",
+            "parentId": null,
+            "status": null,
+            "sort": 5
+        },
+        {
+            "id": 6,
+            "createTime": "2021-06-06 01:39:14",
+            "updateTime": "2021-08-28 18:38:01",
+            "param": {},
+            "name": "乳品烘焙",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8n6AAjUDAABTGU1xPxg840.png",
+            "parentId": null,
+            "status": null,
+            "sort": 6
+        },
+        {
+            "id": 7,
+            "createTime": "2021-06-06 01:39:37",
+            "updateTime": "2021-08-28 18:37:37",
+            "param": {},
+            "name": "面包蛋糕",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8uiAcQ9XAACQof4kpis981.png",
+            "parentId": null,
+            "status": null,
+            "sort": 7
+        },
+        {
+            "id": 8,
+            "createTime": "2021-06-06 01:40:05",
+            "updateTime": "2021-08-28 18:38:02",
+            "param": {},
+            "name": "酒饮冲调",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8n6AAjUDAABTGU1xPxg840.png",
+            "parentId": null,
+            "status": null,
+            "sort": 8
+        },
+        {
+            "id": 9,
+            "createTime": "2021-06-06 01:40:33",
+            "updateTime": "2021-08-28 18:37:54",
+            "param": {},
+            "name": "休闲零食",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8qaAUO2FAADL_iNj45o145.png",
+            "parentId": null,
+            "status": null,
+            "sort": 10
+        },
+        {
+            "id": 10,
+            "createTime": "2021-06-06 01:40:51",
+            "updateTime": "2021-08-28 18:36:57",
+            "param": {},
+            "name": "粮油调味",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8rqAdCTUAACvSp6ekiU197.png",
+            "parentId": null,
+            "status": null,
+            "sort": 10
+        },
+        {
+            "id": 11,
+            "createTime": "2021-06-06 01:41:06",
+            "updateTime": "2021-08-28 18:37:55",
+            "param": {},
+            "name": "日用百货",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8qaAUO2FAADL_iNj45o145.png",
+            "parentId": null,
+            "status": null,
+            "sort": 11
+        },
+        {
+            "id": 12,
+            "createTime": "2021-06-06 01:41:25",
+            "updateTime": "2021-08-28 18:37:40",
+            "param": {},
+            "name": "鲜花宠物",
+            "imgUrl": "http://47.93.148.192:8080/group1/M00/01/95/rBHu8mEq8uiAcQ9XAACQof4kpis981.png",
+            "parentId": null,
+            "status": null,
+            "sort": 12
+        }
+    ],
+    "addressVo": null
+}
 
 nextTick(() => {
   document.body.addEventListener("scroll", () => {
@@ -230,7 +645,7 @@ nextTick(() => {
 });
 
 const goToDetail = (item) => {
-  router.push({ path: `/product/${item.goodsId}` });
+  router.push({ path: `/product/${item.id}` });
 };
 
 const tips = () => {
@@ -304,6 +719,9 @@ const tips = () => {
     }
   }
 }
+.category-wrapper {
+  margin: 10px 10px;
+}
 .category-list {
   display: flex;
   flex-shrink: 0;
@@ -318,7 +736,10 @@ const tips = () => {
     width: 20%;
     text-align: center;
     img {
-      .wh(36px, 36px);
+      // .wh(36px, 36px);
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
       margin: 13px auto 8px auto;
     }
   }
@@ -345,20 +766,46 @@ const tips = () => {
       width: 48%;
       // border-bottom: 1px solid #e9e9e9;
       margin-bottom: 10px;
+      overflow: hidden;
       img {
         display: block;
-        width: 120px;
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        // width: 120px;
         margin: 0 auto;
       }
       .good-desc {
-        text-align: center;
+        // text-align: center;
         font-size: 14px;
-        padding: 10px 0;
+        height: 80px;
+        padding: 10px 10px;
         .title {
           color: #222333;
+          font-weight: bold;
         }
-        .price {
-          color: @primary;
+        .price-desc {
+          margin-top: 10px;
+          display: flex;
+          // justify-content: space-between;
+          // vertical-align: text-bottom;
+          align-items: flex-end;
+          .price-yuan {
+            font-size: 12px;
+            color: @orange;
+            font-weight: bold;
+          }
+          .price {
+            font-size: 18px;
+            color: @orange;
+            font-weight: bold;
+          }
+          .market-price {
+            color: #999;
+            font-size: 12px;
+            // padding-left: 10px;
+          }
+
         }
       }
       // &:nth-child(2n + 1) {

@@ -48,10 +48,10 @@ const init = async () => {
   }
   state.list = data.map(item => {
     return {
-      id: item.addressId,
-      name: item.userName,
-      tel: item.userPhone,
-      address: `${item.provinceName} ${item.cityName} ${item.regionName} ${item.detailAddress}`,
+      id: item.id,
+      name: item.name,
+      tel: item.phone,
+      address: `${item.province} ${item.city} ${item.district} ${item.detailAddress}`,
       isDefault: !!item.defaultFlag
     }
   })
@@ -63,11 +63,11 @@ const onAdd = () => {
 }
 // 前往地址编辑页面
 const onEdit = (item) => {
-  router.push({ path: 'address-edit', query: { type: 'edit', addressId: item.id, from: state.from  } })
+  router.push({ path: 'address-edit', query: { type: 'edit', id: item.id, from: state.from  } })
 }
 // 选择某个地址后，跳回订单生成页面
 const select = (item, index) => {
-  router.push({ path: 'create-order', query: { addressId: item.id, from: state.from  } })
+  router.push({ path: 'create-order', query: { id: item.id, from: state.from  } })
 }
 </script>
 

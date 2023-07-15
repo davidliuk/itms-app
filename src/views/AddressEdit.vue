@@ -34,7 +34,7 @@ const state = reactive({
   },
   searchResult: [],
   type: 'add',
-  addressId: '',
+  id: '',
   addressInfo: {},
   from: route.query.from
 })
@@ -55,12 +55,12 @@ onMounted(async () => {
   state.areaList.city_list = _city_list
   state.areaList.county_list = _county_list
 
-  const { addressId, type, from } = route.query
-  state.addressId = addressId
+  const { id, type, from } = route.query
+  state.id = id
   state.type = type
   state.from = from || ''
   if (type == 'edit') {
-    const { data: addressDetail } = await getAddressDetail(addressId)
+    const { data: addressDetail } = await getAddressDetail(id)
     let _areaCode = ''
     const province = tdist.getLev1()
     Object.entries(state.areaList.county_list).forEach(([id, text]) => {
@@ -78,33 +78,33 @@ onMounted(async () => {
       }
     })
     state.addressInfo = {
-      id: addressDetail.addressId,
-      name: addressDetail.userName,
-      tel: addressDetail.userPhone,
-      province: addressDetail.provinceName,
-      city: addressDetail.cityName,
-      county: addressDetail.regionName,
+      id: addressDetail.id,
+      name: addressDetail.name,
+      tel: addressDetail.phone,
+      province: addressDetail.province,
+      city: addressDetail.city,
+      county: addressDetail.district,
       addressDetail: addressDetail.detailAddress,
       areaCode: _areaCode,
-      isDefault: !!addressDetail.defaultFlag
+      isDefault: !!addressDetail.isDefault
     }
   }
 })
 
 const onSave = async (content) => {
   const params = {
-    userName: content.name,
-    userPhone: content.tel,
-    provinceName: content.province,
-    cityName: content.city,
-    regionName: content.county,
+    name: content.name,
+    phone: content.tel,
+    province: content.province,
+    city: content.city,
+    district: content.county,
     detailAddress: content.addressDetail,
-    defaultFlag: content.isDefault ? 1 : 0,
+    isDefault: content.isDefault ? 1 : 0,
   }
   if (state.type == 'edit') {
-    params['addressId'] = state.addressId
+    params['id'] = state.id
   }
-  addAddress(params);
+  //addAddress(params);
   await state.type == 'add' ? addAddress(params) : EditAddress(params)
   showToast('保存成功')
   setTimeout(() => {
@@ -113,7 +113,7 @@ const onSave = async (content) => {
 }
 
 const onDelete = async () => {
-  await DeleteAddress(state.addressId)
+  await DeleteAddress(state.id)
   showToast('删除成功')
   setTimeout(() => {
     router.back()

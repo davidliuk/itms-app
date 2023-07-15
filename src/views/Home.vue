@@ -805,7 +805,6 @@ const tips = () => {
             font-size: 12px;
             // padding-left: 10px;
           }
-
         }
       }
       // &:nth-child(2n + 1) {

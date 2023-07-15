@@ -5,56 +5,76 @@
       <div class="detail-swipe-wrap">
         <van-swipe class="my-swipe" indicator-color="#1baeae">
           <van-swipe-item
-            v-for="(item, index) in state.detail.goodsCarouselList"
+            v-for="(item, index) in state.detail.skuImageList"
             :key="index"
           >
-            <img :src="item" alt="" />
+            <img :src="item.imgUrl" :alt="item.imgName" />
           </van-swipe-item>
         </van-swipe>
       </div>
       <div class="product-info">
-        <div class="product-title">
-          {{ state.detail.goodsName || "" }}
+        <div class="price-desc">
+          <div class="price-yuan">¥</div>
+          <div class="price">{{ Math.floor(state.detail.price || 0) }}</div>
+          <div class="price-yuan">
+            {{ ((state.detail.price || 0) % 1).toFixed(2).substring(1, 4) }}
+          </div>
+          <div class="market-price">&nbsp; &nbsp; 市场价</div>
+          <div class="market-price">
+            &nbsp; ¥ {{ (state.detail.marketPrice || 0).toFixed(2) }}
+          </div>
         </div>
-        <div class="product-desc">免邮费 顺丰快递</div>
-        <div class="product-price">
-          <span>¥{{ state.detail.sellingPrice || "" }}</span>
-          <!-- <span>库存203</span> -->
+        <div class="product-title text-container">
+          {{ state.detail.skuName || "" }}
+          事实上生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世生生世世
         </div>
+        <div class="product-desc">iTMS - 灵创物运 优选商品</div>
+        <!-- <div class="product-price">
+          <span>¥{{ state.detail.price || "" }}</span>
+        </div> -->
       </div>
       <!-- <van-sticky :offset-top="50" scrollspy> -->
+      <div class="van-wrapper">
         <van-tabs :offset-top="44" scrollspy sticky>
-          <van-tab title="参数">
-            <div
-              class="product-content"
-              v-html="state.detail.goodsDetailContent || ''"
-            />
+          <van-tab class="attr-group" title="参数">
+            <p class="good-header">参数</p>
+            <van-cell-group class="van-cell-back" inset>
+              <van-cell
+                v-for="(item, index) in state.detail.skuAttrValueList"
+                :title="item.attrName"
+                :value="item.attrValue"
+              />
+            </van-cell-group>
           </van-tab>
-          <van-tab title="库存">
-            <div
-              class="product-content"
-              v-html="state.detail.goodsDetailContent || ''"
-            />
+          <van-tab class="product-content" title="库存">
+            <p class="good-header">库存</p>
+            <van-cell-group class="van-cell-back" inset>
+              <van-cell
+                v-for="(item, index) in state.detail.skuWareList"
+                :title="item.wareId + '号仓库'"
+                :value="item.stock + ' 件'"
+                :label="'销量: ' + item.sale + ' 件'"
+              />
+            </van-cell-group>
           </van-tab>
           <van-tab title="详情">
+            <p class="good-header">详情</p>
+            <img
+              v-for="(item, index) in state.detail.skuPosterList"
+              :src="item.imgUrl"
+              :alt="item.imgName"
+              style="width: 100%; padding: 10px"
+            />
             <div
               class="product-content"
               v-html="state.detail.goodsDetailContent || ''"
             />
           </van-tab>
           <!-- <van-tab v-for="index in 8" :title="'选项 ' + index">
-            内容 {{ index }}
-          </van-tab> -->
+              内容 {{ index }}
+            </van-tab> -->
         </van-tabs>
-      <!-- </van-sticky> -->
-      <!-- <div class="product-intro">
-        <ul>
-          <li>概述</li>
-          <li>参数</li>
-          <li>安装服务</li>
-          <li>常见问题</li>
-        </ul>
-      </div> -->
+      </div>
     </div>
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" />
@@ -89,14 +109,18 @@ const cart = useCartStore();
 
 const state = reactive({
   detail: {
-    goodsCarouselList: [],
+    skuImageList: [],
   },
 });
 
 onMounted(async () => {
+  const textContainer = document.querySelector(".text-container");
+  textContainer.addEventListener("click", function () {
+    textContainer.classList.toggle("expanded");
+  });
   const { id } = route.params;
   const { data } = await getDetail(id);
-  data.goodsCarouselList = data.goodsCarouselList.map((i) => prefix(i));
+  // data.skuImageList = data.skuImageList.map((i) => prefix(i));
   state.detail = data;
   cart.updateCart();
 });
@@ -133,6 +157,68 @@ const goToCart = async () => {
 
 <style lang="less">
 @import "../common/style/mixin";
+.good-header {
+  // background: #f9f9f9;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  color: @primary;
+  font-size: 16px;
+  font-weight: 500;
+}
+.van-cell-back {
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.van-wrapper {
+  min-height: 100%;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.text-container {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.text-container::after {
+  // content: '\25BC';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 2px;
+  cursor: pointer;
+}
+.text-container.expanded {
+  -webkit-line-clamp: unset;
+}
+.price-desc {
+  padding-top: 10px;
+  display: flex;
+  // justify-content: space-between;
+  // vertical-align: text-bottom;
+  align-items: flex-end;
+  .price-yuan {
+    font-size: 18px;
+    color: @orange;
+    font-weight: bold;
+  }
+  .price {
+    font-size: 24px;
+    color: @orange;
+    font-weight: bold;
+  }
+  .market-price {
+    color: #999;
+    font-size: 16px;
+    // padding-left: 10px;
+  }
+}
 .product-detail {
   s-header {
     background: rgba(255, 255, 255, 0.7);
@@ -145,12 +231,13 @@ const goToCart = async () => {
     .fj();
     .wh(100%, 44px);
     line-height: 44px;
-    padding: 0 10px;
+    padding: 10px 10px;
     .boxSizing();
     color: #252525;
     // background: #fff;
     border-bottom: 1px solid #dcdcdc;
     .product-name {
+      padding-left: 10px;
       font-size: 14px;
     }
   }
@@ -167,21 +254,22 @@ const goToCart = async () => {
       }
     }
     .product-info {
-      padding: 0 10px;
+      padding: 0 15px;
       margin: 10px 10px;
       background: white;
       border-radius: 20px;
       .product-title {
-        padding-top: 20px;
-        font-size: 18px;
+        // padding: 10px;
+        font-size: 16px;
         text-align: left;
         color: #333;
+        font-weight: bold;
       }
       .product-desc {
         font-size: 14px;
         text-align: left;
         color: #999;
-        padding: 5px 0;
+        padding: 10px 0;
       }
       .product-price {
         padding-bottom: 10px;

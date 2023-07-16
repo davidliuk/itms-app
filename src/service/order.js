@@ -25,5 +25,3 @@ export function payOrder(params) {
 }
 
 
-
-

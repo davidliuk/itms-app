@@ -11,8 +11,10 @@ export function modifyCart(params) {
 // export function getCart(params) {
 //   return axios.get('/shop-cart', { params });
 // }
-export function getCart(params) {
-  return axios.get('/cart/cartList', { params });
+
+// 传参去掉了
+export function getCart() {
+  return axios.get('/cart/cartList/');
 }
 
 export function deleteCartItem(id) {

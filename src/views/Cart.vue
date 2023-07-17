@@ -3,27 +3,29 @@
   <div class="cart-box">
     <s-header :name="'购物车'" :noback="true"></s-header>
     <div class="cart-body">
-      <van-checkbox-group @change="groupChange" v-model="state.result" ref="checkboxGroup">
+      <van-checkbox-group @change="groupChange(state.result)" v-model="state.result" ref="checkboxGroup">
         <van-swipe-cell :right-width="50" v-for="(item, index) in state.list" :key="index">
           <div class="good-item">
             <van-checkbox :name="item.cartItemId" />
-            <div class="good-img"><img :src="$filters.prefix(item.goodsCoverImg)" alt=""></div>
+            <div class="good-img"><img :src="$filters.prefix(item.cartSkuImg)" alt=""></div>
             <div class="good-desc">
               <div class="good-title">
-                <span>{{ item.goodsName }}</span>
-                <span>x{{ item.goodsCount }}</span>
+                <span>{{ item.cartSkuName }}</span>
+                <span>x{{ item.cartSkuNum }}</span>
               </div>
               <div class="good-btn">
-                <div class="price">¥{{ item.sellingPrice }}</div>
+                <div class="price">¥{{ (item.cartSkuSellingPrice * item.cartSkuNum).toFixed(2)}}</div>
+                <!--                计数器-->
                 <van-stepper
                   integer
                   :min="1"
-                  :max="5"
-                  :model-value="item.goodsCount"
+
+                  :model-value="item.cartSkuNum"
                   :name="item.cartItemId"
                   async-change
                   @change="onChange"
                 />
+                <!--                计数器-->
               </div>
             </div>
           </div>
@@ -81,22 +83,42 @@ onMounted(() => {
   init()
 })
 
+//  初始化所有调出购物车redis中所有的商品
 const init = async () => {
   showLoadingToast({ message: '加载中...', forbidClick: true });
-  const { data } = await getCart({ pageNumber: 1 })
-  state.list = data
-  state.result = data.map(item => item.cartItemId)
+  // const { data } = await getCart({ pageNumber: 1 })
+  const { data } = await getCart()
+  setTimeout(200)
+  state.list = data.map(item => {
+    return{
+      // data里调用是skuId，state的list里面调用是cartItemId
+      cartItemId:item.skuId,
+      cartSkuName:item.skuName,
+      cartSkuNum:item.skuNum,
+      cartSkuImg:item.imgUrl,
+      cartSkuSellingPrice:item.cartPrice,
+    }
+  })
+  // console.log("@@@state.list");
+
+  state.result = data.map(item => item.skuId)
   closeToast()
 }
+//  初始化所有调出购物车redis中所有的商品
 
+
+// 计算总价
 const total = computed(() => {
   let sum = 0
   let _list = state.list.filter(item => state.result.includes(item.cartItemId))
+  console.log(state.result);
   _list.forEach(item => {
-    sum += item.goodsCount * item.sellingPrice
+    sum += item.cartSkuNum * item.cartSkuSellingPrice
   })
+  console.log(sum);
   return sum
 })
+// 计算总价
 
 const goBack = () => {
   router.go(-1)
@@ -107,10 +129,13 @@ const goTo = () => {
 }
 
 const onChange = async (value, detail) => {
-  if (value > 5) {
-    showFailToast('超出单个商品的最大购买数量')
-    return
-  }
+  // value是这个商品的用户选择的数量
+  // detail是这个商品的skuId
+
+  // if (value > 5) {
+  //   showFailToast('超出单个商品的最大购买数量')
+  //   return
+  // }
   if (value < 1) {
     showFailToast('商品不得小于0')
     return
@@ -120,20 +145,20 @@ const onChange = async (value, detail) => {
    * 这边做一个拦截处理，如果点击的时候，购物车单项的 goodsCount 等于点击的计步器数字，
    * 那么就不再进行修改操作
   */
-  if (state.list.find(item => item.cartItemId == detail.name)?.goodsCount == value) return
+  if (state.list.find(item => item.cartItemId == detail.name)?.cartSkuNum == value) return
   showLoadingToast({ message: '修改中...', forbidClick: true });
   const params = {
     cartItemId: detail.name,
     goodsCount: value
   }
-  await modifyCart(params)
+  // await modifyCart(params)
   /**
    * 修改完成后，没有请求购物车列表，是因为闪烁的问题，
    * 这边手动给操作的购物车商品修改数据
   */
   state.list.forEach(item => {
     if (item.cartItemId == detail.name) {
-      item.goodsCount = value
+      item.cartSkuNum = value
     }
   })
   closeToast()

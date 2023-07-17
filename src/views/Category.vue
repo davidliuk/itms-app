@@ -2,6 +2,7 @@
 <template>
   <div class="categray">
     <div>
+      <!--        搜索框-->
       <header class="category-header wrap van-hairline--bottom">
         <i class="nbicon nbfanhui" @click="goHome"></i>
         <!-- <div class="header-search">
@@ -20,24 +21,26 @@
         <i class="iconfont icon-More"></i>
       </header>
       <nav-bar></nav-bar>
+<!--      中间内容-->
       <div class="search-wrap" ref="searchWrap">
         <list-scroll :scroll-data="state.categoryData" class="nav-side-wrapper">
           <ul class="nav-side">
             <li
               v-for="item in state.categoryData"
-              :key="item.categoryId"
-              v-text="item.categoryName"
-              :class="{'active' : state.currentIndex == item.categoryId}"
-              @click="selectMenu(item.categoryId)"
+              :key="item.id"
+              v-text="item.name"
+              :class="{'active' : state.currentIndex == item.id}"
+              @click="selectMenu(item.id)"
             ></li>
           </ul>
         </list-scroll>
+
         <div class="search-content">
           <list-scroll :scroll-data="state.categoryData" >
             <div class="swiper-container">
               <div class="swiper-wrapper">
                 <template v-for="(category, index) in state.categoryData">
-                  <div class="swiper-slide" v-if="state.currentIndex == category.categoryId" :key="index">
+                  <div class="swiper-slide" v-if="state.currentIndex == category.id" :key="index">
                     <!-- <img class="category-main-img" :src="category.mainImgUrl" v-if="category.mainImgUrl"/> -->
                     <div class="category-list" v-for="(products, index) in category.secondLevelCategoryVOS" :key="index">
                       <p class="catogory-title">{{products.categoryName}}</p>
@@ -69,7 +72,8 @@ const router = useRouter()
 const searchWrap = ref(null)
 const state = reactive({
   categoryData: [],
-  currentIndex: 15
+  currentIndex: 15,
+  categoryDataTwo:[],
 })
 
 onMounted(async () => {
@@ -78,8 +82,19 @@ onMounted(async () => {
   searchWrap.value.style.height = $screenHeight - 100 + 'px'
   showLoadingToast('加载中...')
   const { data } = await getCategory()
+  console.log('~~~~~~data:')
+  console.log(data);
   closeToast()
-  state.categoryData = data
+  // state.categoryData = data;
+  state.categoryData= data.map(item => {
+    return {
+      id: item.id,
+      name: item.name,
+      parentId: item.parentId,
+      status: item.status,
+      imgUrl: item.imgUrl
+    }
+  })
 })
 
 const goHome = () => {
@@ -88,6 +103,10 @@ const goHome = () => {
 
 const selectMenu = (index) => {
   state.currentIndex = index
+  // state.categoryDataTwo= state.categoryData.filter(item => item.parentId == index);
+  state.categoryDataTwo= state.categoryData.filter(item => item.parentId!=null);
+  console.log("二级列表：")
+  console.log(state.categoryDataTwo);
 }
 
 const selectProduct = (item) => {

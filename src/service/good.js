@@ -7,8 +7,11 @@ export function getDetail(id) {
   return axios.get(`/product/skuInfo/${id}`);
 }
 
+// export function getCategory() {
+//   return axios.get('/categories');
+// }
 export function getCategory() {
-  return axios.get('/categories');
+  return axios.get('/admin/product/category/findAllList');
 }
 
 // export function search(params) {

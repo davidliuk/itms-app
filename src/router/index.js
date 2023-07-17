@@ -112,6 +112,38 @@ const router = createRouter({
         index: 2
       }
     },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('@/views/About.vue'),
+      meta: {
+        index: 2
+      }
+    },
+    {
+      path: '/work',
+      name: 'work',
+      component: () => import('@/views/Work.vue'),
+      meta: {
+        index: 2
+      }
+    },
+    {
+      path: '/workOrder-detail',
+      name: 'workOrder-detail',
+      component: () => import('@/views/WorkOrderDetail.vue'),
+      meta: {
+        index: 3
+      }
+    },
+    {
+      path: '/workOrder',
+      name: 'workOrder',
+      component: () => import('@/views/WorkOrder.vue'),
+      meta: {
+        index: 3
+      }
+    },
   ]
 })
 

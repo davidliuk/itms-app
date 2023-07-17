@@ -102,6 +102,7 @@ import { addCart } from "@/service/cart";
 import sHeader from "@/components/SimpleHeader.vue";
 import { showSuccessToast } from "vant";
 import { prefix } from "@/common/js/utils";
+import {checkCart} from "../service/cart";
 const route = useRoute();
 const router = useRouter();
 const cart = useCartStore();
@@ -138,6 +139,13 @@ const goTo = () => {
   router.push({ path: "/cart" });
 };
 
+const goToBuy = async () => {
+  await addCart( state.detail.id, 1 );
+ checkCart(state.detail.id,1);
+  await cart.updateCart();
+  await router.push({path: "/create-order"});
+};
+
 const handleAddCart = async () => {
   const { resultCode } = await addCart({
     goodsCount: 1,
@@ -148,7 +156,7 @@ const handleAddCart = async () => {
 };
 
 const goToCart = async () => {
-  await addCart({ goodsCount: 1, goodsId: state.detail.goodsId });
+  await addCart(state.detail.id, 1);
   cart.updateCart();
   router.push({ path: "/cart" });
 };

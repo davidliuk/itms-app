@@ -1,7 +1,11 @@
 import axios from '../utils/axios'
 
-export function addCart(params) {
-  return axios.post('/shop-cart', params);
+export function addCart(skuId, skuNum) {
+  return axios.post(`/cart/addToCart/${skuId}/${skuNum}`);
+}
+
+export function checkCart(skuId, isChecked) {
+  return axios.get(`/cart/checkCart/${skuId}/${isChecked}`);
 }
 
 export function modifyCart(params) {
@@ -21,7 +25,7 @@ export function deleteCartItem(id) {
   return axios.delete(`/shop-cart/${id}`);
 }
 
-export function getByCartItemIds(params) {
-  return axios.get('/shop-cart/settle', { params });
+export function getByCartItemIds(userId) {
+  return axios.get(`/cart/inner/getCartCheckedList/${userId}`);
 }
 

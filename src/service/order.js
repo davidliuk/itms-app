@@ -1,7 +1,7 @@
 import axios from '../utils/axios'
 
 export function createOrder(params) {
-  return axios.post('/saveOrder', params);
+  return axios.post('/order/auth/submitOrder', params);
 }
 
 export function getOrderList(params) {
@@ -21,7 +21,7 @@ export function confirmOrder(id) {
 }
 
 export function payOrder(params) {
-  return axios.get('/paySuccess', { params })
+  return axios.get(`/order/queryPayStatus/${state.orderNo}`, { params })
 }
 
 

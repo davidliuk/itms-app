@@ -14,7 +14,7 @@ export function getWorkOrderDetail(id) {
   return axios.get(`/order/${id}`);
 }
 
-export function getOrderItemList(orderId) {
+export function getOrderInfo(orderId) {
   return axios.get(`/order/auth/getOrderDetailById/${orderId}`);
 }
 

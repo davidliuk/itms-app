@@ -44,7 +44,7 @@
                 <span>{{ item.workStatus }}</span>
               </div>
               <van-card
-                    v-for="sku in getItem(item.orderId)"
+                    v-for="sku in item.orderInfo.orderItemList"
                     :key="sku.id"
                     style="background: #fff"
                     :num="sku.skuNum"
@@ -74,7 +74,7 @@
 <script setup>
 import {onMounted, reactive} from 'vue';
 import sHeader from '@/components/SimpleHeader.vue'
-import {getWorkOrderList,takeReturnWorkOrder,takeWorkOrder,getOrderItemList} from '@/service/work'
+import {getWorkOrderList,takeReturnWorkOrder,takeWorkOrder,getOrderInfo} from '@/service/work'
 import { useRouter } from 'vue-router'
 import {getUserInfo} from "@/service/user";
 import {closeToast, showLoadingToast} from "vant";
@@ -118,6 +118,9 @@ const loadData = async () => {
         state.page,
         10,
         { workType:null,workStatus: null,courierId:state.courierInfo.id })
+    for (const workOrder of data.records) {
+      workOrder.orderInfo = await getItem(workOrder.orderId);
+    }
     state.list = state.list.concat(data.records)
     state.totalPage = data.pages
   }else {
@@ -125,7 +128,9 @@ const loadData = async () => {
         state.page,
         10,
         { workType:null,workStatus: state.status,courierId:state.courierInfo.id })
-    console.log(data)
+    for (const workOrder of data.records) {
+      workOrder.orderInfo = await getItem(workOrder.orderId);
+    }
     state.list = state.list.concat(data.records)
     state.totalPage = data.pages
   }
@@ -171,11 +176,8 @@ const onRefresh = () => {
 }
 
 const getItem = async(orderId) =>{
-  const { data } = await getOrderItemList(orderId)
-  state.orderItem=data.orderItemList
-  console.log('+++++++++++++++++')
-  console.log(data.orderItemList)
-  return data.orderItemList
+  const { data } = await getOrderInfo(orderId)
+  return data
 }
 const takeStation = (orderId) =>{
   console.log(orderId);

@@ -1,7 +1,7 @@
 import axios from '../utils/axios'
 
 export function addCart(skuId, skuNum) {
-  return axios.post(`/cart/addToCart/${skuId}/${skuNum}`);
+  return axios.get(`/cart/addToCart/${skuId}/${skuNum}`);
 }
 
 export function checkCart(skuId, isChecked) {

@@ -65,6 +65,7 @@ const state = reactive({
   address: {},
   showPay: false,
   orderNo: '',
+  userId: '39',
   cartItemIds: []
 })
 
@@ -77,12 +78,13 @@ const init = async () => {
   const { addressId, cartItemIds } = route.query;
   const _cartItemIds = cartItemIds ? JSON.parse(cartItemIds) : JSON.parse(getLocal('cartItemIds'))
   setLocal('cartItemIds', JSON.stringify(_cartItemIds))
-  const { data: list } = await getByCartItemIds({ cartItemIds: _cartItemIds.join(',') })
   const { data: address } = addressId ? await getAddressDetail(addressId) : await getDefaultAddress()
   if (!address) {
     router.push({ path: '/address' })
     return
   }
+  //const { userId }  = getAddressDetail(addressId).userId;
+  const { data: list } = await getByCartItemIds(userId)
   state.cartList = list
   state.address = address
   closeToast()

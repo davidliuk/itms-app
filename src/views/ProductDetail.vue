@@ -147,17 +147,16 @@ const goToBuy = async () => {
 };
 
 const handleAddCart = async () => {
-  const { resultCode } = await addCart({
-    goodsCount: 1,
-    goodsId: state.detail.goodsId,
-  });
-  if (resultCode == 200) showSuccessToast("添加成功");
+  const { resultCode } = await addCart(state.detail.id, 1);
   cart.updateCart();
 };
 
 const goToCart = async () => {
-  await addCart(state.detail.id, 1);
-  cart.updateCart();
+  alert(state.detail.id)
+  const { resultCode } = await addCart(state.detail.id, 1);
+  //cart.updateCart();
+  const { result } =await checkCart(state.detail.id, 1);
+  await cart.updateCart();
   router.push({ path: "/cart" });
 };
 </script>

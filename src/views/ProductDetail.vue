@@ -103,6 +103,7 @@ import sHeader from "@/components/SimpleHeader.vue";
 import { showSuccessToast } from "vant";
 import { prefix } from "@/common/js/utils";
 import {checkCart} from "../service/cart";
+import {confirmOrders} from "../service/order";
 const route = useRoute();
 const router = useRouter();
 const cart = useCartStore();
@@ -157,6 +158,7 @@ const goToCart = async () => {
   //cart.updateCart();
   const { result } =await checkCart(state.detail.id, 1);
   await cart.updateCart();
+  await confirmOrders();
   router.push({ path: "/cart" });
 };
 </script>

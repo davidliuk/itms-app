@@ -68,6 +68,7 @@ import { showToast, showLoadingToast, closeToast, showFailToast } from 'vant'
 import navBar from '@/components/NavBar.vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getCart, deleteCartItem, modifyCart } from '@/service/cart'
+import {confirmOrders} from "../service/order";
 
 const router = useRouter()
 const cart = useCartStore()

@@ -13,14 +13,14 @@
     </div>
     <div class="good">
       <div class="good-item" v-for="(item, index) in state.cartList" :key="index">
-        <div class="good-img"><img :src="$filters.prefix(item.img)" alt=""></div>
+        <div class="good-img"><img :src="$filters.prefix(item.imgUrl)" alt=""></div>
         <div class="good-desc">
           <div class="good-title">
-            <span>{{ item.name }}</span>
-            <span>x{{ item.goodsCount }}</span>
+            <span>{{ item.skuName }}</span>
+            <span>x{{ item.skuNum }}</span>
           </div>
           <div class="good-btn">
-            <div class="price">¥{{ item.sellingPrice }}</div>
+            <div class="price">¥{{ item.cartPrice }}</div>
           </div>
         </div>
       </div>
@@ -58,6 +58,7 @@ import { setLocal, getLocal } from '@/common/js/utils'
 import { showLoadingToast, closeToast, showSuccessToast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import {addCart} from "../service/cart";
+import {confirmOrders} from "../service/order";
 const router = useRouter()
 const route = useRoute()
 const state = reactive({
@@ -65,8 +66,7 @@ const state = reactive({
   address: {},
   showPay: false,
   orderNo: '',
-  userId: '39',
-  cartItemIds: []
+  cartItemIds: [],
 })
 
 onMounted(() => {
@@ -75,23 +75,33 @@ onMounted(() => {
 
 const init = async () => {
   showLoadingToast({ message: '加载中...', forbidClick: true });
+/*
   const { addressId, cartItemIds } = route.query;
   const _cartItemIds = cartItemIds ? JSON.parse(cartItemIds) : JSON.parse(getLocal('cartItemIds'))
   setLocal('cartItemIds', JSON.stringify(_cartItemIds))
   const { data: address } = addressId ? await getAddressDetail(addressId) : await getDefaultAddress()
+*/
+  //const { userId }  = getAddressDetail(addressId).userId;
+  const { data } = await confirmOrders();
+ // const { data: address } = await confirmOrders().addressVo;
+  console.log(data)
+  let orderNo = data.orderNo;
+  let list = data.carInfoList;
+  let address = data.addressVo;
   if (!address) {
     router.push({ path: '/address' })
     return
   }
-  //const { userId }  = getAddressDetail(addressId).userId;
-  const { data: list } = await getByCartItemIds(userId)
   state.cartList = list
   state.address = address
+  state.orderNo = orderNo
   closeToast()
 }
 
 const goTo = () => {
+  //router.push({ path: '/address', query: { cartItemIds: JSON.stringify(state.cartItemIds), from: 'create-order' }})
   router.push({ path: '/address', query: { cartItemIds: JSON.stringify(state.cartItemIds), from: 'create-order' }})
+
 }
 
 const deleteLocal = () => {
@@ -99,7 +109,7 @@ const deleteLocal = () => {
 }
 
 const handleCreateOrder = async () => {
-  const params = {
+/*  const params = {
     addressId: state.address.addressId,
     cartItemIds: state.cartList.map(item =>item.cartItemId
     )
@@ -108,7 +118,11 @@ const handleCreateOrder = async () => {
   console.log("~~~~data");
   console.log(data);
   setLocal('cartItemIds', '')
-  state.orderNo = data
+  state.orderNo = data*/
+  const params = {
+    address: state.address,
+    orderNo: state.orderNo,
+  }
   state.showPay = true
 }
 

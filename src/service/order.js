@@ -15,11 +15,16 @@ export function getOrderDetail(id) {
 export function cancelOrder(id) {
   return axios.put(`/order/${id}/cancel`);
 }
-
+/*
 export function confirmOrder(id) {
-  return axios.put(`/order/${id}/finish`)
-}
+  return axios.put(` /api/order/auth/confirmOrder`);
+  //return axios.put(`/order/${id}/finish`)
+}*/
 
+export function confirmOrders() {
+  return axios.get(`/order/auth/confirmOrder`);
+  //return axios.put(`/order/${id}/finish`)
+}
 export function payOrder(params) {
   return axios.get(`/order/queryPayStatus/${state.orderNo}`, { params })
 }

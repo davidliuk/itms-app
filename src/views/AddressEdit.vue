@@ -65,14 +65,14 @@ onMounted(async () => {
     const province = tdist.getLev1()
     Object.entries(state.areaList.county_list).forEach(([id, text]) => {
       // 先找出当前对应的区
-      if (text == addressDetail.regionName) {
+      if (text == addressDetail.region) {
         // 找到区对应的几个省份
         const provinceIndex = province.findIndex(item => item.id.substr(0, 2) == id.substr(0, 2))
         // 找到区对应的几个市区
         // eslint-disable-next-line no-unused-vars
         const cityItem = Object.entries(state.areaList.city_list).filter(([cityId, cityName]) => cityId.substr(0, 4) == id.substr(0, 4))[0]
         // 对比找到的省份和接口返回的省份是否相等，因为有一些区会重名
-        if (province[provinceIndex].text == addressDetail.provinceName && cityItem[1] == addressDetail.cityName) {
+        if (province[provinceIndex].text == addressDetail.province && cityItem[1] == addressDetail.city) {
           _areaCode = id
         }
       }

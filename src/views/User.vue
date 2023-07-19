@@ -16,15 +16,15 @@
     </van-skeleton>
     <ul class="user-list">
       <order-list></order-list>
-      <work-order-list></work-order-list>
+      <!-- <work-order-list></work-order-list> -->
 
       <div>
-        <li class="van-hairline--bottom " @click="goTo('/order')">
-          <span>我的订单</span>
+        <li class="van-hairline--bottom" @click="goTo('/setting')">
+          <span>账号管理</span>
           <van-icon name="arrow" />
         </li>
-        <li class="van-hairline--bottom" @click="goTo('/coupon')">
-          <span>优惠券</span>
+        <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
+          <span>地址管理</span>
           <van-icon name="arrow" />
         </li>
         <li class="van-hairline--bottom" @click="goTo('/collect')">
@@ -35,31 +35,15 @@
           <span>我的足迹</span>
           <van-icon name="arrow" />
         </li>
-        <li class="van-hairline--bottom" @click="goTo('/setting')">
-          <span>账号管理</span>
+        <li class="van-hairline--bottom" @click="logout()">
+          <span>账户退出</span>
           <van-icon name="arrow" />
-        </li>
-        <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
-          <span>地址管理</span>
-          <van-icon name="arrow" />
-        </li>
-        <li class="van-hairline--bottom" @click="goTo('/work')">
-           <span>我的任务单</span>
-           <van-icon name="arrow" />
         </li>
       </div>
-      <li class="van-hairline--bottom" @click="goTo('/setting')">
-        <span>账号管理</span>
-        <van-icon name="arrow" />
-      </li>
-      <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
+      <!-- <li class="van-hairline--bottom" @click="goTo('/address', { from: 'mine' })">
         <span>地址管理</span>
         <van-icon name="arrow" />
-      </li>
-      <li class="van-hairline--bottom" @click="goTo('/about')">
-        <span>关于我们</span>
-        <van-icon name="arrow" />
-      </li>
+      </li> -->
     </ul>
     <nav-bar></nav-bar>
   </div>
@@ -73,6 +57,7 @@ import OrderList from '@/components/OrderList.vue'
 import WorkOrderList from '@/components/WorkOrderList.vue'
 import { getUserInfo } from '@/service/user'
 import { useRouter } from 'vue-router'
+import { logout } from '@/service/user'
 const router = useRouter()
 const state = reactive({
   user: {},

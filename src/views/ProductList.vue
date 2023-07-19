@@ -71,6 +71,8 @@
 import { reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { search } from "@/service/good";
+import { useSearchStore } from "../stores/search";
+const searchStore = useSearchStore();
 const route = useRoute();
 const router = useRouter();
 const state = reactive({
@@ -88,6 +90,7 @@ const state = reactive({
 });
 const init = async () => {
   const { categoryId } = route.query;
+  category ||= searchStore.categoryId;
   if (!categoryId && !state.keyword) {
     state.finished = true;
     state.loading = false;

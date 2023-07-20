@@ -4,7 +4,7 @@ export const useSearchStore = defineStore('cart', () => {
   const categoryId = ref();
 
   function updateCategoryId(categoryId) {
-    count.value = categoryId
+    this.categoryId = categoryId
   }
 
   return { categoryId, updateCategoryId }

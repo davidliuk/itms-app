@@ -1,7 +1,9 @@
 
 <template>
   <div class="cart-box">
-    <s-header :name="'购物车'" :noback="true"></s-header>
+    <s-header :name="'购物车'" :noback="true">
+    </s-header>
+
     <div class="cart-body">
       <van-checkbox-group @change="groupChange(state.result)" v-model="state.result" ref="checkboxGroup">
         <van-swipe-cell :right-width="50" v-for="(item, index) in state.list" :key="index">
@@ -50,7 +52,10 @@
       @submit="onSubmit"
     >
       <van-checkbox @click="allCheck" v-model:checked="state.checkAll">全选</van-checkbox>
+      <van-button plain type="danger" size="mini" style="margin-left: 10px">删除</van-button>
     </van-submit-bar>
+
+
     <div class="empty" v-if="!state.list.length">
       <img class="empty-cart" src="https://s.yezgea02.com/1604028375097/empty-car.png" alt="空购物车">
       <div class="title">购物车空空如也</div>
@@ -106,8 +111,6 @@ const init = async () => {
   closeToast()
 }
 //  初始化所有调出购物车redis中所有的商品
-
-
 // 计算总价
 const total = computed(() => {
   let sum = 0

@@ -23,10 +23,10 @@
       <nav-bar></nav-bar>
 <!--      中间内容-->
       <div class="search-wrap" ref="searchWrap">
-        <list-scroll :scroll-data="state.categoryData" class="nav-side-wrapper">
+        <list-scroll :scroll-data="state.categoryDataOne" class="nav-side-wrapper">
           <ul class="nav-side">
             <li
-              v-for="item in state.categoryData"
+              v-for="item in state.categoryDataOne"
               :key="item.id"
               v-text="item.name"
               :class="{'active' : state.currentIndex == item.id}"
@@ -35,26 +35,52 @@
           </ul>
         </list-scroll>
 
+
+<!--          <van-grid :column-num="3">-->
+<!--            <van-grid-item v-for="(category, index) in state.categoryDataTwo" :key="index" icon="photo"  :text="category.name" >-->
+<!--              <img :src="category.imgUrl" style="width: 100px;height:100px">-->
+<!--            </van-grid-item>-->
+<!--          </van-grid>-->
+
         <div class="search-content">
-          <list-scroll :scroll-data="state.categoryData" >
+          <list-scroll :scroll-data="state.categoryDataOne" >
             <div class="swiper-container">
               <div class="swiper-wrapper">
-                <template v-for="(category, index) in state.categoryData">
+                <template v-for="(category, index) in state.categoryDataOne">
                   <div class="swiper-slide" v-if="state.currentIndex == category.id" :key="index">
                     <!-- <img class="category-main-img" :src="category.mainImgUrl" v-if="category.mainImgUrl"/> -->
-                    <div class="category-list" v-for="(products, index) in category.secondLevelCategoryVOS" :key="index">
-                      <p class="catogory-title">{{products.categoryName}}</p>
-                      <div class="product-item" v-for="(product, index) in products.thirdLevelCategoryVOS" :key="index" @click="selectProduct(product)">
-                        <img src="//s.weituibao.com/1583591077131/%E5%88%86%E7%B1%BB.png" class="product-img"/>
-                        <p v-text="product.categoryName" class="product-title"></p>
-                      </div>
-                    </div>
+
+                    <van-grid :column-num="3">
+                      <van-grid-item
+                          v-for="(category2, index2) in state.categoryDataTwo"
+                          :key="index2" icon="photo"
+                          :text="category.name"
+                          @click="productList(category2.id)"
+                      >
+                        <img :src="category2.imgUrl" style="width: 70px;height:70px" >
+
+                        <text>{{category2.name}}</text>
+                      </van-grid-item>
+                    </van-grid>
+
+
+<!--                    <div class="category-list" v-for="(products, index) in category.secondLevelCategoryVOS" :key="index">-->
+<!--                      <p class="catogory-title">{{products.categoryName}}</p>-->
+<!--                      <div class="product-item" v-for="(product, index) in products.thirdLevelCategoryVOS" :key="index" @click="selectProduct(product)">-->
+<!--                        <img src="//s.weituibao.com/1583591077131/%E5%88%86%E7%B1%BB.png" class="product-img"/>-->
+<!--                        <p v-text="product.categoryName" class="product-title"></p>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+
                   </div>
                 </template>
               </div>
             </div>
           </list-scroll>
         </div>
+
+
       </div>
     </div>
   </div>
@@ -67,14 +93,17 @@ import navBar from '@/components/NavBar.vue'
 import listScroll from '@/components/ListScroll.vue'
 import { getCategory } from "@/service/good"
 import { showLoadingToast, closeToast } from 'vant'
+import {useSearchStore} from "@/stores/search";
 const router = useRouter()
 // composition API 获取 refs 的形式
 const searchWrap = ref(null)
 const state = reactive({
   categoryData: [],
   currentIndex: 15,
+  categoryDataOne:[],
   categoryDataTwo:[],
 })
+const searchStore = useSearchStore();
 
 onMounted(async () => {
   let $screenHeight = document.documentElement.clientHeight
@@ -82,8 +111,6 @@ onMounted(async () => {
   searchWrap.value.style.height = $screenHeight - 100 + 'px'
   showLoadingToast('加载中...')
   const { data } = await getCategory()
-  console.log('~~~~~~data:')
-  console.log(data);
   closeToast()
   // state.categoryData = data;
   state.categoryData= data.map(item => {
@@ -95,7 +122,18 @@ onMounted(async () => {
       imgUrl: item.imgUrl
     }
   })
+
+  state.categoryDataOne =state.categoryData.filter(item => item.parentId==0);
+
 })
+
+const productList = (categoryId) =>{
+  searchStore.updateCategoryId(categoryId);
+  router.push({
+    path:'product-list',
+  })
+}
+
 
 const goHome = () => {
   router.push({ path: 'home' })
@@ -103,8 +141,9 @@ const goHome = () => {
 
 const selectMenu = (index) => {
   state.currentIndex = index
-  // state.categoryDataTwo= state.categoryData.filter(item => item.parentId == index);
-  state.categoryDataTwo= state.categoryData.filter(item => item.parentId!=null);
+  console.log(index);
+  state.categoryDataTwo= state.categoryData.filter(item => item.parentId === index);
+  // state.categoryDataTwo= state.categoryData.filter(item => item.parentId!=0);
   console.log("二级列表：")
   console.log(state.categoryDataTwo);
 }

@@ -71,10 +71,12 @@
 import { reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { search } from "@/service/good";
-import { useSearchStore } from "../stores/search";
-const searchStore = useSearchStore();
 const route = useRoute();
 const router = useRouter();
+
+import { useSearchStore } from "../stores/search";
+const searchStore = useSearchStore();
+
 const state = reactive({
   keyword: route.query.keyword || "",
   searchBtn: false,
@@ -89,14 +91,14 @@ const state = reactive({
   orderBy: "",
 });
 const init = async () => {
-  const { categoryId } = route.query;
-  category ||= searchStore.categoryId;
+  let { categoryId } = route.query;
+  categoryId ||= searchStore.categoryId;
   if (!categoryId && !state.keyword) {
     state.finished = true;
     state.loading = false;
     return;
   }
-  
+  console.log(categoryId);
   const {
     data,
     data: { content },

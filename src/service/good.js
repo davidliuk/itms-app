@@ -11,7 +11,7 @@ export function getDetail(id) {
 //   return axios.get('/categories');
 // }
 export function getCategory() {
-  return axios.get('/admin/product/category/findAllList');
+  return axios.get('/product/findAllList');
 }
 
 // export function search(params) {

@@ -123,7 +123,7 @@ onMounted(async () => {
   const { data } = await getDetail(id);
   // data.skuImageList = data.skuImageList.map((i) => prefix(i));
   state.detail = data;
-  cart.updateCart();
+  await cart.updateCart();
 });
 
 nextTick(() => {

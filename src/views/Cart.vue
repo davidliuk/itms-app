@@ -73,7 +73,6 @@ import { showToast, showLoadingToast, closeToast, showFailToast } from 'vant'
 import navBar from '@/components/NavBar.vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getCart, deleteCartItem, modifyCart } from '@/service/cart'
-import {confirmOrders} from "../service/order";
 
 const router = useRouter()
 const cart = useCartStore()
@@ -107,7 +106,8 @@ const init = async () => {
   })
   // console.log("@@@state.list");
 
-  state.result = data.map(item => item.skuId)
+  // state.result = data.map(item => item.skuId)
+  state.result=[];
   closeToast()
 }
 //  初始化所有调出购物车redis中所有的商品

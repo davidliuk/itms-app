@@ -72,7 +72,7 @@ import { useCartStore } from '@/stores/cart'
 import { showToast, showLoadingToast, closeToast, showFailToast } from 'vant'
 import navBar from '@/components/NavBar.vue'
 import sHeader from '@/components/SimpleHeader.vue'
-import { getCart, deleteCartItem, modifyCart } from '@/service/cart'
+import {getCart, deleteCartItem, modifyCart, checkCart, getByCartItemIds} from '@/service/cart'
 
 const router = useRouter()
 const cart = useCartStore()
@@ -105,6 +105,11 @@ const init = async () => {
     }
   })
   // console.log("@@@state.list");
+  await state.list.forEach((item) =>{
+    checkCart(item.cartItemId, 0)
+  })
+
+
 
   // state.result = data.map(item => item.skuId)
   state.result=[];
@@ -115,11 +120,9 @@ const init = async () => {
 const total = computed(() => {
   let sum = 0
   let _list = state.list.filter(item => state.result.includes(item.cartItemId))
-  console.log(state.result);
   _list.forEach(item => {
     sum += item.cartSkuNum * item.cartSkuSellingPrice
   })
-  console.log(sum);
   return sum
 })
 // 计算总价
@@ -174,6 +177,12 @@ const onSubmit = async () => {
     return
   }
   const params = JSON.stringify(state.result)
+
+  await state.result.forEach((id) =>{
+     checkCart(id, 1)
+    }
+  )
+  await cart.updateCart();
   router.push({ path: '/create-order', query: { cartItemIds: params } })
 }
 

@@ -92,7 +92,9 @@ const state = reactive({
 });
 const init = async () => {
   let { categoryId } = route.query;
-  categoryId ||= searchStore.categoryId;
+  if (categoryId == null) {
+    categoryId = searchStore.categoryId;
+  }
   if (!categoryId && !state.keyword) {
     state.finished = true;
     state.loading = false;
@@ -310,6 +312,7 @@ const changeTab = ({ name }) => {
   margin-top: 100px;
 }
 .product-list-refresh {
+  width: 100%;
   .product-item {
     .fj();
     width: 100%;

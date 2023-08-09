@@ -120,7 +120,7 @@
           placeholder="请输入邮箱验证码"
         >
           <template #button>
-            <van-button size="small" type="primary">发送验证码</van-button>
+            <van-button size="small" type="primary" @click="sendLoginCode">发送验证码</van-button>
           </template>
         </van-field>
         <van-field
@@ -136,7 +136,7 @@
         </van-field>
         <!-- <div style="margin: 16px;"> -->
         <div>
-          <van-button round block color="#1baeae" native-type="submit">注册</van-button>
+          <van-button round block color="#1baeae" native-type="submit">登录</van-button>
           <div class="toggle-link-group">
             <div class="link-login" @click="toggle('login')">
               账户密码登录
@@ -156,7 +156,7 @@
 import { reactive, ref } from 'vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import vueImgVerify from '@/components/VueImageVerify.vue'
-import { login, register } from '@/service/user'
+import { login, register, sendCode, loginEmail } from '@/service/user'
 import { setLocal } from '@/common/js/utils'
 import md5 from 'js-md5'
 import { showSuccessToast, showFailToast } from 'vant'
@@ -172,6 +172,13 @@ const state = reactive({
   imgCode: '',
   verify: ''
 })
+
+const sendLoginCode = () => {
+  console.log('sendCode')
+  sendCode({
+    "email": state.email
+  })
+};
 
 // 切换登录和注册两种模式
 const toggle = (v) => {
@@ -197,7 +204,14 @@ const onSubmit = async (values) => {
     setLocal('token', data.token)
     // 需要刷新页面，否则 axios.js 文件里的 token 不会被重置
     window.location.href = '/'
-  } else {
+  } else if (state.type == 'email') {
+    const { data } = await loginEmail({
+      "email": values.email,
+      "code": values.code
+    })
+    console.log(data);
+    setLocal('token', data.token)
+  }else {
     await register({
       "username": values.username1,
       "password": values.password1

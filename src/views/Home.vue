@@ -214,7 +214,7 @@ onMounted(async () => {
     message: "加载中...",
     forbidClick: true,
   });
-  const { data } = await getHome();
+  let { data } = await getHome();
   if (data == null) {
     data = toData;
   }
